@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ep1 cenas 1-2</title>
+<style>
+:root{
+  --bg:#08204F;            /* azul da bandeira, escurecido */
+  --verde:#00953A;         /* verde bandeira */
+  --amarelo:#FFDF00;       /* amarelo bandeira */
+  --azul-bandeira:#002776;
+  --branco:#FFFFFF;
+  --navy:#08204F;
+  --esq:#E03A3E;           /* esquerda */
+  --cen:#8A4DE8;           /* centro */
+  --dir:#2F8BEF;           /* direita (azul diferente do da bandeira) */
+  --over:cubic-bezier(.22,1.45,.36,1);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Inter Display","Inter",system-ui,sans-serif;color:var(--branco)}
+*,*::before,*::after{animation-play-state:paused !important}
+.abs{position:absolute}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 80% at 50% 30%,#0E2E6E 0%,#08204F 55%,#05163A 100%)}
+
+/* losango de fundo */
+#losango{left:140px;top:560px;width:800px;height:800px;border:6px solid var(--amarelo);opacity:0;transform:rotate(45deg) scale(.9);border-radius:24px;
+  animation:losIn 1.2s var(--ease) 0s both, losBreath 6s ease-in-out 1.2s both}
+@keyframes losIn{from{opacity:0;transform:rotate(45deg) scale(.9)}to{opacity:.09;transform:rotate(45deg) scale(1)}}
+@keyframes losBreath{0%{opacity:.09;transform:rotate(45deg) scale(1)}50%{opacity:.12;transform:rotate(45deg) scale(1.04)}100%{opacity:.09;transform:rotate(45deg) scale(1)}}
+
+/* badge do episódio */
+#ep{left:64px;top:84px;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:34px;letter-spacing:.08em;padding:14px 26px;border-radius:999px;
+  animation:pop .6s var(--over) .1s both}
+@keyframes pop{from{opacity:0;transform:scale(.8) translateY(20px)}to{opacity:1;transform:none}}
+
+/* ---------- CENA 1 ---------- */
+#s1{left:0;top:0;width:1080px;height:1920px;animation:s1out .45s var(--ease) 4.7s both}
+@keyframes s1out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-50px)}}
+
+#h1{left:64px;top:240px;width:952px;font-size:136px;line-height:.94;font-weight:900;letter-spacing:-.035em;text-transform:uppercase;color:var(--amarelo)}
+#h1 .l{display:block;animation:pop .7s var(--over) both}
+#h1 .l1{animation-delay:.25s}
+#h1 .l2{animation-delay:.5s;color:var(--branco)}
+#rule{left:64px;top:528px;width:420px;height:12px;background:var(--amarelo);border-radius:6px;transform-origin:left center;animation:draw .7s var(--ease) .9s both}
+@keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.card{top:780px;width:420px;height:540px;border-radius:40px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.14);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px}
+.card .lbl{font-size:54px;font-weight:800;letter-spacing:-.02em}
+.card svg{width:280px;height:auto}
+#cardL{left:70px;animation:slideL .8s var(--over) 1.2s both}
+#cardR{left:590px;animation:slideR .8s var(--over) 1.8s both}
+@keyframes slideL{from{opacity:0;transform:translateX(-360px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(360px)}to{opacity:1;transform:none}}
+#cardL .in{animation:bumpL .55s var(--ease) 3.3s both}
+#cardR .in{animation:bumpR .55s var(--ease) 3.3s both}
+.in{display:flex;flex-direction:column;align-items:center;gap:34px}
+@keyframes bumpL{0%{transform:none}45%{transform:translateX(26px)}100%{transform:none}}
+@keyframes bumpR{0%{transform:none}45%{transform:translateX(-26px)}100%{transform:none}}
+
+#ou{left:480px;top:990px;width:120px;height:120px;border-radius:50%;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:52px;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.35);animation:pop .6s var(--over) 1.55s both}
+#ou .t{animation:ouPulse .55s var(--ease) 3.3s both}
+@keyframes ouPulse{0%{transform:none}45%{transform:scale(1.25)}100%{transform:none}}
+
+#sub1{left:0;top:1420px;width:1080px;text-align:center;font-size:40px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.02em;animation:pop .6s var(--over) 2.5s both}
+
+/* ---------- CENA 2 ---------- */
+#s2{left:0;top:0;width:1080px;height:1920px}
+.panel{left:0;top:0;width:1080px;height:1920px}
+#pVerde{background:var(--verde);clip-path:polygon(0 0,100% 0,100% 0%,0 0%);animation:wipeTop .65s var(--ease) 5s both}
+#pAmarelo{background:var(--amarelo);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);animation:wipeBot .65s var(--ease) 5.05s both}
+@keyframes wipeTop{from{clip-path:polygon(0 0,100% 0,100% 0%,0 0%)}to{clip-path:polygon(0 0,100% 0,100% 46%,0 54%)}}
+@keyframes wipeBot{from{clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%)}to{clip-path:polygon(0 54%,100% 46%,100% 100%,0 100%)}}
+
+.big{left:0;width:1080px;text-align:center;font-size:128px;font-weight:900;letter-spacing:-.035em;line-height:1;text-transform:uppercase}
+.sub{left:60px;width:960px;text-align:center;font-size:42px;font-weight:600;line-height:1.25}
+.verb{left:0;width:1080px;text-align:center;font-size:54px;font-weight:700;letter-spacing:-.01em}
+
+#exec{top:150px;color:var(--branco);animation:pop .7s var(--over) 5.45s both}
+#execSub{top:306px;color:rgba(255,255,255,.9);animation:pop .6s var(--over) 5.8s both}
+#execVerb{top:470px;color:var(--branco);animation:pop .6s var(--over) 8.9s both}
+#chipsExec{left:0;top:560px;width:1080px;display:flex;justify-content:center;gap:24px}
+
+#legis{top:1070px;color:var(--navy);animation:pop .7s var(--over) 6.05s both}
+#legisSub{top:1226px;color:var(--navy);animation:pop .6s var(--over) 6.4s both}
+#hemi{left:330px;top:1312px;width:420px;height:150px}
+#hemi circle{transform-box:fill-box;transform-origin:center;animation:seat .5s var(--over) both}
+@keyframes seat{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+#chipsLegis{left:0;top:1484px;width:1080px;display:flex;justify-content:center;gap:24px}
+
+.chip{display:flex;align-items:center;gap:16px;height:88px;padding:0 34px;border-radius:999px;font-size:42px;font-weight:700;letter-spacing:-.01em;animation:pop .6s var(--over) both}
+.chip svg{width:58px;height:58px;flex:none}
+#chipsExec .chip{background:var(--branco);color:var(--navy)}
+#chipsLegis .chip{background:var(--navy);color:var(--branco)}
+#c1{animation-delay:9.6s}#c2{animation-delay:10.3s}#c3{animation-delay:11.0s}
+#c4{animation-delay:12.6s}#c5{animation-delay:13.6s}
+
+/* lupa que sobe para fiscalizar */
+#lupa{left:0;top:0;width:150px;height:150px;animation:lupaGo 2.4s var(--ease) 14s both}
+#lupa svg{width:150px;height:150px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35))}
+@keyframes lupaGo{
+  0%{opacity:0;transform:translate(640px,1470px) scale(.6)}
+  12%{opacity:1;transform:translate(640px,1470px) scale(1)}
+  55%{opacity:1;transform:translate(300px,540px) scale(1.15)}
+  70%{transform:translate(560px,540px) scale(1.15)}
+  85%{transform:translate(780px,540px) scale(1.15)}
+  100%{opacity:1;transform:translate(560px,540px) scale(1.15)}
+}
+
+/* legendas */
+.cap{left:70px;top:1620px;width:940px;padding:30px 42px;border-radius:30px;background:rgba(8,32,79,.94);color:var(--branco);
+  font-size:46px;font-weight:600;line-height:1.3;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.25)}
+.cap b{color:var(--amarelo);font-weight:800}
+.cap i{color:#4BE88A;font-style:normal;font-weight:800}
+#cap1{animation:cap 2.6s linear 5s both}
+#cap2{animation:cap 4.2s linear 7.6s both}
+#cap3{animation:capHold 4.6s linear 11.8s both}
+@keyframes cap{0%{opacity:0;transform:translateY(24px)}8%{opacity:1;transform:none}92%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-14px)}}
+@keyframes capHold{0%{opacity:0;transform:translateY(24px)}6%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="losango" class="abs"></div>
+
+  <!-- CENA 1 -->
+  <div id="s1" class="abs">
+    <div id="h1" class="abs"><span class="l l1">Quem manda</span><span class="l l2">no Brasil?</span></div>
+    <div id="rule" class="abs"></div>
+
+    <div id="cardL" class="card abs"><div class="in">
+      <!-- Palácio do Planalto (estilizado) -->
+      <svg viewBox="0 0 200 140" fill="none"><rect x="8" y="22" width="184" height="14" rx="4" fill="var(--verde)"/>
+        <path d="M46 36 Q 30 78 46 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M86 36 Q 70 78 86 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M126 36 Q 110 78 126 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M166 36 Q 150 78 166 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <rect x="0" y="120" width="200" height="14" rx="4" fill="var(--verde)"/>
+        <polygon points="0,118 78,118 0,92" fill="var(--verde)" opacity=".8"/></svg>
+      <div class="lbl">o presidente</div></div></div>
+
+    <div id="ou" class="abs"><span class="t">ou</span></div>
+
+    <div id="cardR" class="card abs"><div class="in">
+      <!-- Congresso Nacional (estilizado): concha, torres, cúpula -->
+      <svg viewBox="0 0 210 150" fill="var(--amarelo)"><rect x="0" y="122" width="210" height="14" rx="4"/>
+        <path d="M12 82 A40 40 0 0 0 92 82 Z"/>
+        <rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/>
+        <path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>
+      <div class="lbl">o Congresso</div></div></div>
+
+    <div id="sub1" class="abs">Executivo × Legislativo</div>
+  </div>
+
+  <!-- CENA 2 -->
+  <div id="s2" class="abs">
+    <div id="pVerde" class="panel abs"></div>
+    <div id="pAmarelo" class="panel abs"></div>
+
+    <div id="exec" class="big abs">Executivo</div>
+    <div id="execSub" class="sub abs">presidente · governador · prefeito</div>
+    <div id="execVerb" class="verb abs">administra:</div>
+    <div id="chipsExec" class="abs">
+      <div class="chip" id="c1"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="var(--amarelo)"/><circle cx="32" cy="32" r="21" fill="none" stroke="var(--navy)" stroke-width="3"/><text x="32" y="41" text-anchor="middle" font-size="24" font-weight="900" fill="var(--navy)" font-family="Inter">R$</text></svg>dinheiro</div>
+      <div class="chip" id="c2"><svg viewBox="0 0 64 64" fill="none" stroke="var(--navy)" stroke-width="6" stroke-linecap="round"><path d="M14 58V14"/><path d="M14 14H54"/><path d="M14 26L34 14"/><path d="M48 14V34"/><rect x="40" y="34" width="16" height="12" rx="2" fill="var(--amarelo)" stroke="none"/><path d="M8 58h20"/></svg>obras</div>
+      <div class="chip" id="c3"><svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="36" rx="8" fill="var(--navy)"/><rect x="14" y="18" width="16" height="12" rx="2" fill="var(--amarelo)"/><rect x="34" y="18" width="16" height="12" rx="2" fill="var(--amarelo)"/><circle cx="20" cy="52" r="6" fill="var(--navy)"/><circle cx="44" cy="52" r="6" fill="var(--navy)"/><rect x="12" y="36" width="40" height="6" rx="2" fill="var(--amarelo)"/></svg>serviços</div>
+    </div>
+
+    <div id="legis" class="big abs">Legislativo</div>
+    <div id="legisSub" class="sub abs">Congresso · assembleias · câmaras de vereadores</div>
+    <svg id="hemi" class="abs" viewBox="0 0 420 150"></svg>
+    <div id="chipsLegis" class="abs">
+      <div class="chip" id="c4"><svg viewBox="0 0 64 64" fill="none"><path d="M14 6h26l12 12v40H14z" fill="var(--branco)"/><path d="M40 6v12h12" fill="var(--amarelo)"/><path d="M22 30h22M22 38h22M22 46h12" stroke="var(--navy)" stroke-width="4" stroke-linecap="round"/><circle cx="44" cy="50" r="7" fill="var(--amarelo)"/></svg>cria as regras</div>
+      <div class="chip" id="c5"><svg viewBox="0 0 64 64" fill="none" stroke="var(--amarelo)" stroke-width="7" stroke-linecap="round"><circle cx="27" cy="27" r="17"/><path d="M40 40L56 56"/></svg>fiscaliza</div>
+    </div>
+
+    <div id="lupa" class="abs"><svg viewBox="0 0 64 64" fill="none" stroke="var(--amarelo)" stroke-width="7" stroke-linecap="round"><circle cx="27" cy="27" r="17" fill="rgba(255,223,0,.18)"/><path d="M40 40L56 56"/></svg></div>
+
+    <div id="cap1" class="cap abs">Os dois, mas em coisas diferentes.</div>
+    <div id="cap2" class="cap abs">O <i>Executivo</i> (presidente, governador e prefeito) administra: dinheiro, obras, serviços.</div>
+    <div id="cap3" class="cap abs">O <b>Legislativo</b> cria as regras e fiscaliza quem administra.</div>
+  </div>
+
+  <div id="ep" class="abs">EP. 1</div>
+</div>
+<script>
+// hemiciclo: 3 fileiras, cores por terço (esquerda / centro / direita)
+(function(){
+  const svg=document.getElementById('hemi');
+  const rows=[[72,8],[108,11],[144,14]];
+  const cols=['#E03A3E','#8A4DE8','#2F8BEF'];
+  let k=0;
+  rows.forEach(([r,n])=>{
+    for(let i=0;i<n;i++){
+      const f=(i+.5)/n, a=Math.PI+f*Math.PI;
+      const cx=210+r*Math.cos(a), cy=148+r*Math.sin(a);
+      const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx',cx.toFixed(1));c.setAttribute('cy',cy.toFixed(1));c.setAttribute('r','13');
+      c.setAttribute('fill',cols[f<1/3?0:(f<2/3?1:2)]);
+      c.style.animationDelay=(6.7+k*0.025).toFixed(3)+'s';
+      svg.appendChild(c);k++;
+    }
+  });
+})();
+window.seek=function(ms){document.getAnimations().forEach(a=>{a.currentTime=ms;});return document.getAnimations().length;};
+</script>
+</body>
+</html>
