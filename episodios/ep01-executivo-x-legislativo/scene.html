@@ -2,20 +2,17 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Ep1 cenas 1-2</title>
+<title>Ep1 completo</title>
+<script>
+// Linha do tempo (segundos). Única fonte de verdade: alimenta as variáveis CSS e os elementos gerados por JS.
+window.T = { s1: 0, s2: 5, s3: 16, s4: 30, s5: 40, s6: 50.5, end: 56.5 };
+for (const k in T) document.documentElement.style.setProperty('--' + k, T[k] + 's');
+</script>
 <style>
 :root{
-  --bg:#08204F;            /* azul da bandeira, escurecido */
-  --verde:#00953A;         /* verde bandeira */
-  --amarelo:#FFDF00;       /* amarelo bandeira */
-  --azul-bandeira:#002776;
-  --branco:#FFFFFF;
-  --navy:#08204F;
-  --esq:#E03A3E;           /* esquerda */
-  --cen:#8A4DE8;           /* centro */
-  --dir:#2F8BEF;           /* direita (azul diferente do da bandeira) */
-  --over:cubic-bezier(.22,1.45,.36,1);
-  --ease:cubic-bezier(.2,.8,.2,1);
+  --bg:#08204F; --verde:#00953A; --verdeClaro:#19B75A; --amarelo:#FFDF00; --navy:#08204F; --branco:#fff;
+  --esq:#E03A3E; --cen:#8A4DE8; --dir:#2F8BEF;
+  --over:cubic-bezier(.22,1.45,.36,1); --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Inter Display","Inter",system-ui,sans-serif;color:var(--branco)}
@@ -23,142 +20,193 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 .abs{position:absolute}
 #stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:radial-gradient(120% 80% at 50% 30%,#0E2E6E 0%,#08204F 55%,#05163A 100%)}
 
-/* losango de fundo */
-#losango{left:140px;top:560px;width:800px;height:800px;border:6px solid var(--amarelo);opacity:0;transform:rotate(45deg) scale(.9);border-radius:24px;
-  animation:losIn 1.2s var(--ease) 0s both, losBreath 6s ease-in-out 1.2s both}
+/* fundo e badge persistentes */
+#losango{left:140px;top:560px;width:800px;height:800px;border:6px solid var(--amarelo);border-radius:24px;
+  animation:losIn 1.2s var(--ease) 0s both, losBreath 6s ease-in-out 1.2s infinite}
 @keyframes losIn{from{opacity:0;transform:rotate(45deg) scale(.9)}to{opacity:.09;transform:rotate(45deg) scale(1)}}
 @keyframes losBreath{0%{opacity:.09;transform:rotate(45deg) scale(1)}50%{opacity:.12;transform:rotate(45deg) scale(1.04)}100%{opacity:.09;transform:rotate(45deg) scale(1)}}
+#ep{left:64px;top:84px;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:34px;letter-spacing:.08em;padding:14px 26px;border-radius:999px;z-index:50;animation:pop .6s var(--over) .1s both}
 
-/* badge do episódio */
-#ep{left:64px;top:84px;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:34px;letter-spacing:.08em;padding:14px 26px;border-radius:999px;
-  animation:pop .6s var(--over) .1s both}
+/* cenas: entrada/saída genéricas */
+.sc{left:0;top:0;width:1080px;height:1920px;animation:scIn .5s var(--ease) var(--t) both, scOut .45s var(--ease) var(--tout) forwards}
+@keyframes scIn{from{opacity:0}to{opacity:1}}
+@keyframes scOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-40px)}}
 @keyframes pop{from{opacity:0;transform:scale(.8) translateY(20px)}to{opacity:1;transform:none}}
-
-/* ---------- CENA 1 ---------- */
-#s1{left:0;top:0;width:1080px;height:1920px;animation:s1out .45s var(--ease) 4.7s both}
-@keyframes s1out{from{opacity:1;transform:none}to{opacity:0;transform:translateY(-50px)}}
-
-#h1{left:64px;top:240px;width:952px;font-size:136px;line-height:.94;font-weight:900;letter-spacing:-.035em;text-transform:uppercase;color:var(--amarelo)}
-#h1 .l{display:block;animation:pop .7s var(--over) both}
-#h1 .l1{animation-delay:.25s}
-#h1 .l2{animation-delay:.5s;color:var(--branco)}
-#rule{left:64px;top:528px;width:420px;height:12px;background:var(--amarelo);border-radius:6px;transform-origin:left center;animation:draw .7s var(--ease) .9s both}
+@keyframes fadeOut{to{opacity:0}}
 @keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
-.card{top:780px;width:420px;height:540px;border-radius:40px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.14);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px}
+/* legendas */
+.cap{left:70px;top:1620px;width:940px;padding:30px 42px;border-radius:30px;font-size:46px;font-weight:600;line-height:1.3;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.25);
+  animation:cap var(--d) linear var(--t) both}
+.cap.dark{background:rgba(8,32,79,.94);color:var(--branco)}
+.cap.dark b{color:var(--amarelo);font-weight:800}.cap.dark i{color:#4BE88A;font-style:normal;font-weight:800}
+.cap.light{background:rgba(255,255,255,.96);color:var(--navy)}
+.cap.light b{color:#B08A00;font-weight:800}.cap.light i{color:var(--verde);font-style:normal;font-weight:800}
+.cap.hold{animation-name:capHold}
+@keyframes cap{0%{opacity:0;transform:translateY(24px)}8%{opacity:1;transform:none}92%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-14px)}}
+@keyframes capHold{0%{opacity:0;transform:translateY(24px)}8%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+
+.hl{left:64px;width:952px;font-weight:900;letter-spacing:-.035em;text-transform:uppercase;line-height:.94}
+.hl .l{display:block;animation:pop .7s var(--over) both}
+
+/* ---------- CENA 1 ---------- */
+#s1{--t:var(--s1);--tout:calc(var(--s2) - .35s)}
+#s1 .hl{top:240px;font-size:136px;color:var(--amarelo)}
+#s1 .l1{animation-delay:.25s}#s1 .l2{animation-delay:.5s;color:var(--branco)}
+#rule{left:64px;top:528px;width:420px;height:12px;background:var(--amarelo);border-radius:6px;transform-origin:left center;animation:draw .7s var(--ease) .9s both}
+.card{top:780px;width:420px;height:540px;border-radius:40px;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center}
+.card .in{display:flex;flex-direction:column;align-items:center;gap:34px}
 .card .lbl{font-size:54px;font-weight:800;letter-spacing:-.02em}
 .card svg{width:280px;height:auto}
-#cardL{left:70px;animation:slideL .8s var(--over) 1.2s both}
-#cardR{left:590px;animation:slideR .8s var(--over) 1.8s both}
+#cardL{left:70px;animation:slideL .8s var(--over) 1.2s both}#cardR{left:590px;animation:slideR .8s var(--over) 1.8s both}
 @keyframes slideL{from{opacity:0;transform:translateX(-360px)}to{opacity:1;transform:none}}
 @keyframes slideR{from{opacity:0;transform:translateX(360px)}to{opacity:1;transform:none}}
-#cardL .in{animation:bumpL .55s var(--ease) 3.3s both}
-#cardR .in{animation:bumpR .55s var(--ease) 3.3s both}
-.in{display:flex;flex-direction:column;align-items:center;gap:34px}
+#cardL .in{animation:bumpL .55s var(--ease) 3.3s both}#cardR .in{animation:bumpR .55s var(--ease) 3.3s both}
 @keyframes bumpL{0%{transform:none}45%{transform:translateX(26px)}100%{transform:none}}
 @keyframes bumpR{0%{transform:none}45%{transform:translateX(-26px)}100%{transform:none}}
-
-#ou{left:480px;top:990px;width:120px;height:120px;border-radius:50%;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:52px;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.35);animation:pop .6s var(--over) 1.55s both}
+#ou{left:480px;top:990px;width:120px;height:120px;border-radius:50%;background:var(--amarelo);color:var(--navy);font-weight:900;font-size:52px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.35);animation:pop .6s var(--over) 1.55s both}
 #ou .t{animation:ouPulse .55s var(--ease) 3.3s both}
 @keyframes ouPulse{0%{transform:none}45%{transform:scale(1.25)}100%{transform:none}}
-
-#sub1{left:0;top:1420px;width:1080px;text-align:center;font-size:40px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.02em;animation:pop .6s var(--over) 2.5s both}
+#sub1{left:0;top:1420px;width:1080px;text-align:center;font-size:40px;font-weight:600;color:rgba(255,255,255,.55);animation:pop .6s var(--over) 2.5s both}
 
 /* ---------- CENA 2 ---------- */
-#s2{left:0;top:0;width:1080px;height:1920px}
+#s2{--t:var(--s2);--tout:calc(var(--s3) - .4s)}
 .panel{left:0;top:0;width:1080px;height:1920px}
-#pVerde{background:var(--verde);clip-path:polygon(0 0,100% 0,100% 0%,0 0%);animation:wipeTop .65s var(--ease) 5s both}
-#pAmarelo{background:var(--amarelo);clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);animation:wipeBot .65s var(--ease) 5.05s both}
+#pVerde{background:var(--verde);animation:wipeTop .65s var(--ease) var(--s2) both}
+#pAmarelo{background:var(--amarelo);animation:wipeBot .65s var(--ease) calc(var(--s2) + .05s) both}
 @keyframes wipeTop{from{clip-path:polygon(0 0,100% 0,100% 0%,0 0%)}to{clip-path:polygon(0 0,100% 0,100% 46%,0 54%)}}
 @keyframes wipeBot{from{clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%)}to{clip-path:polygon(0 54%,100% 46%,100% 100%,0 100%)}}
-
 .big{left:0;width:1080px;text-align:center;font-size:128px;font-weight:900;letter-spacing:-.035em;line-height:1;text-transform:uppercase}
 .sub{left:60px;width:960px;text-align:center;font-size:42px;font-weight:600;line-height:1.25}
-.verb{left:0;width:1080px;text-align:center;font-size:54px;font-weight:700;letter-spacing:-.01em}
-
-#exec{top:150px;color:var(--branco);animation:pop .7s var(--over) 5.45s both}
-#execSub{top:306px;color:rgba(255,255,255,.9);animation:pop .6s var(--over) 5.8s both}
-#execVerb{top:470px;color:var(--branco);animation:pop .6s var(--over) 8.9s both}
+.verb{left:0;width:1080px;text-align:center;font-size:54px;font-weight:700}
+#exec{top:150px;animation:pop .7s var(--over) calc(var(--s2) + .45s) both}
+#execSub{top:306px;color:rgba(255,255,255,.9);animation:pop .6s var(--over) calc(var(--s2) + .8s) both}
+#execVerb{top:470px;animation:pop .6s var(--over) calc(var(--s2) + 3.9s) both}
 #chipsExec{left:0;top:560px;width:1080px;display:flex;justify-content:center;gap:24px}
-
-#legis{top:1070px;color:var(--navy);animation:pop .7s var(--over) 6.05s both}
-#legisSub{top:1226px;color:var(--navy);animation:pop .6s var(--over) 6.4s both}
+#legis{top:1070px;color:var(--navy);animation:pop .7s var(--over) calc(var(--s2) + 1.05s) both}
+#legisSub{top:1226px;color:var(--navy);animation:pop .6s var(--over) calc(var(--s2) + 1.4s) both}
 #hemi{left:330px;top:1312px;width:420px;height:150px}
 #hemi circle{transform-box:fill-box;transform-origin:center;animation:seat .5s var(--over) both}
 @keyframes seat{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
 #chipsLegis{left:0;top:1484px;width:1080px;display:flex;justify-content:center;gap:24px}
-
-.chip{display:flex;align-items:center;gap:16px;height:88px;padding:0 34px;border-radius:999px;font-size:42px;font-weight:700;letter-spacing:-.01em;animation:pop .6s var(--over) both}
+.chip{display:flex;align-items:center;gap:16px;height:88px;padding:0 34px;border-radius:999px;font-size:42px;font-weight:700;animation:pop .6s var(--over) both}
 .chip svg{width:58px;height:58px;flex:none}
-#chipsExec .chip{background:var(--branco);color:var(--navy)}
-#chipsLegis .chip{background:var(--navy);color:var(--branco)}
-#c1{animation-delay:9.6s}#c2{animation-delay:10.3s}#c3{animation-delay:11.0s}
-#c4{animation-delay:12.6s}#c5{animation-delay:13.6s}
-
-/* lupa que sobe para fiscalizar */
-#lupa{left:0;top:0;width:150px;height:150px;animation:lupaGo 2.4s var(--ease) 14s both}
+#chipsExec .chip{background:var(--branco);color:var(--navy)}#chipsLegis .chip{background:var(--navy);color:var(--branco)}
+#c1{animation-delay:calc(var(--s2) + 4.6s)}#c2{animation-delay:calc(var(--s2) + 5.3s)}#c3{animation-delay:calc(var(--s2) + 6s)}
+#c4{animation-delay:calc(var(--s2) + 7.6s)}#c5{animation-delay:calc(var(--s2) + 8.6s)}
+#lupa{left:0;top:0;width:150px;height:150px;animation:lupaGo 2.4s var(--ease) calc(var(--s2) + 9s) both}
 #lupa svg{width:150px;height:150px;filter:drop-shadow(0 12px 24px rgba(0,0,0,.35))}
-@keyframes lupaGo{
-  0%{opacity:0;transform:translate(640px,1470px) scale(.6)}
-  12%{opacity:1;transform:translate(640px,1470px) scale(1)}
-  55%{opacity:1;transform:translate(300px,540px) scale(1.15)}
-  70%{transform:translate(560px,540px) scale(1.15)}
-  85%{transform:translate(780px,540px) scale(1.15)}
-  100%{opacity:1;transform:translate(560px,540px) scale(1.15)}
-}
+@keyframes lupaGo{0%{opacity:0;transform:translate(640px,1470px) scale(.6)}12%{opacity:1;transform:translate(640px,1470px) scale(1)}55%{opacity:1;transform:translate(300px,540px) scale(1.15)}70%{transform:translate(560px,540px) scale(1.15)}85%{transform:translate(780px,540px) scale(1.15)}100%{opacity:1;transform:translate(560px,540px) scale(1.15)}}
 
-/* legendas */
-.cap{left:70px;top:1620px;width:940px;padding:30px 42px;border-radius:30px;background:rgba(8,32,79,.94);color:var(--branco);
-  font-size:46px;font-weight:600;line-height:1.3;text-align:center;box-shadow:0 14px 40px rgba(0,0,0,.25)}
-.cap b{color:var(--amarelo);font-weight:800}
-.cap i{color:#4BE88A;font-style:normal;font-weight:800}
-#cap1{animation:cap 2.6s linear 5s both}
-#cap2{animation:cap 4.2s linear 7.6s both}
-#cap3{animation:capHold 4.6s linear 11.8s both}
-@keyframes cap{0%{opacity:0;transform:translateY(24px)}8%{opacity:1;transform:none}92%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-14px)}}
-@keyframes capHold{0%{opacity:0;transform:translateY(24px)}6%{opacity:1;transform:none}100%{opacity:1;transform:none}}
+/* ---------- CENA 3: quem faz a lei ---------- */
+#s3{--t:var(--s3);--tout:calc(var(--s4) - .4s)}
+#s3 .hl{top:200px;font-size:96px;color:var(--branco)}
+#s3 .l1{animation-delay:calc(var(--s3) + .2s)}#s3 .l2{animation-delay:calc(var(--s3) + .45s);color:var(--amarelo)}
+.bloco{left:60px;width:600px;height:260px;border-radius:36px;display:flex;align-items:center;gap:28px;padding:0 36px;font-size:50px;font-weight:900;letter-spacing:-.02em;text-transform:uppercase}
+.bloco svg{width:150px;height:auto;flex:none}
+.bloco.pres{background:rgba(0,149,58,.22);border:3px solid var(--verde)}
+.bloco.cong{background:rgba(255,223,0,.14);border:3px solid var(--amarelo);color:var(--amarelo)}
+#bPres{top:490px;animation:slideL .7s var(--over) calc(var(--s3) + .7s) both}
+#bCong{top:1190px;animation:slideL .7s var(--over) calc(var(--s3) + 1s) both}
+#doc{left:720px;top:0;width:320px;height:260px;animation:docPop .6s var(--over) calc(var(--s3) + 1.5s) both, docMove 12.5s var(--ease) calc(var(--s3) + 1.5s) both}
+#doc .paper{position:absolute;inset:0;background:var(--branco);border-radius:20px;padding:22px;color:var(--navy);box-shadow:0 16px 40px rgba(0,0,0,.35)}
+#doc .paper .tt{font-size:28px;font-weight:900;letter-spacing:.02em}
+#doc .paper .ln{height:12px;border-radius:6px;background:#C9D2E3;margin-top:16px}
+#doc .paper .ln.s{width:60%}
+@keyframes docPop{from{opacity:0}to{opacity:1}}
+@keyframes docMove{0%{transform:translateY(505px)}20%{transform:translateY(505px)}26.4%{transform:translateY(1205px)}48%{transform:translateY(1205px)}54.4%{transform:translateY(505px)}72%{transform:translateY(505px)}78.4%{transform:translateY(1205px)}100%{transform:translateY(1205px)}}
+.stamp{position:absolute;padding:6px 14px;border:5px solid;border-radius:10px;font-size:30px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,255,255,.85);animation:stampIn .4s var(--over) both}
+@keyframes stampIn{from{opacity:0;transform:scale(1.8) rotate(var(--r))}to{opacity:1;transform:scale(1) rotate(var(--r))}}
+#stAprov{--r:-10deg;left:24px;top:120px;color:var(--verde);border-color:var(--verde);animation:stampIn .4s var(--over) calc(var(--s3) + 5s) both, fadeOut .3s linear calc(var(--s3) + 8.5s) forwards}
+#stVeto{--r:6deg;left:110px;top:150px;color:#D62828;border-color:#D62828;animation-delay:calc(var(--s3) + 8.5s)}
+#stVeto .strike{position:absolute;left:-8px;right:-8px;top:50%;height:10px;background:var(--verde);transform-origin:left center;animation:draw .35s var(--ease) calc(var(--s3) + 11.5s) both}
+#stDerr{--r:-5deg;left:22px;top:66px;font-size:26px;white-space:nowrap;color:var(--navy);border-color:var(--navy);background:var(--amarelo);animation-delay:calc(var(--s3) + 11.6s)}
+.tag{left:720px;width:320px;text-align:center;font-size:40px;font-weight:800;padding:14px 0;border-radius:999px;animation:cap var(--d) linear var(--t) both}
+.tag.g{background:var(--verde);color:var(--branco)}.tag.y{background:var(--amarelo);color:var(--navy)}
+#tg1{top:765px;--t:calc(var(--s3) + 1.7s);--d:2.3s}
+#tg2{top:1125px;--t:calc(var(--s3) + 5s);--d:2.5s}
+#tg3{top:765px;--t:calc(var(--s3) + 8.5s);--d:2s}
+#tg4{top:1125px;--t:calc(var(--s3) + 11.5s);--d:2.6s}
+.glow{animation:glowP 1s ease-out both}
+@keyframes glowP{0%{box-shadow:0 0 0 0 rgba(255,255,255,.0)}30%{box-shadow:0 0 0 18px rgba(255,255,255,.18)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+/* ---------- CENA 4: dinheiro ---------- */
+#s4{--t:var(--s4);--tout:calc(var(--s5) - .4s)}
+#s4 .hl{top:190px;font-size:120px;color:var(--amarelo)}
+#s4 .l1{animation-delay:calc(var(--s4) + .2s)}
+#bGov{top:430px;height:240px;animation:slideL .7s var(--over) calc(var(--s4) + .6s) both}
+#bCong4{top:990px;height:240px;animation:slideL .7s var(--over) calc(var(--s4) + .9s) both}
+#coins{left:760px;top:430px;width:260px;height:240px;animation:coinsMove .8s var(--ease) calc(var(--s4) + 3.3s) both, fadeOut .4s linear calc(var(--s4) + 4.6s) forwards}
+@keyframes coinsMove{from{transform:none}to{transform:translateY(560px)}}
+.coin{position:absolute;left:60px;width:140px;height:140px;border-radius:50%;background:var(--amarelo);border:8px solid #E5C800;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:var(--navy);box-shadow:0 8px 20px rgba(0,0,0,.3);animation:pop .5s var(--over) both}
+#co1{top:90px;animation-delay:calc(var(--s4) + .9s)}#co2{top:50px;animation-delay:calc(var(--s4) + 1.4s)}#co3{top:10px;animation-delay:calc(var(--s4) + 1.9s)}
+#barra{left:60px;top:1300px;width:960px;height:96px;display:flex;border-radius:24px;overflow:hidden;gap:6px}
+#barra div{height:100%;transform-origin:left center;animation:draw .6s var(--ease) both;border-radius:12px}
+#labels{left:60px;top:1420px;width:960px;display:flex;gap:6px}
+#labels div{text-align:center;font-size:27px;white-space:nowrap;font-weight:700;animation:pop .5s var(--over) both}
+#orcTag{left:760px;top:930px;width:260px;text-align:center;font-size:36px;font-weight:800;color:var(--navy);background:var(--amarelo);padding:12px 0;border-radius:999px;animation:cap 2s linear calc(var(--s4) + 1.9s) both}
+
+/* ---------- CENA 5: base aliada ---------- */
+#s5{--t:var(--s5);--tout:calc(var(--s6) - .4s)}
+#s5 .hl{top:170px;font-size:128px;color:var(--amarelo)}
+#s5 .l1{animation-delay:calc(var(--s5) + .2s)}
+#s5 .sub5{left:60px;top:330px;width:960px;text-align:center;font-size:44px;font-weight:600;color:rgba(255,255,255,.75);animation:pop .6s var(--over) calc(var(--s5) + .6s) both}
+#hemi5{left:60px;top:470px;width:960px;height:520px}
+#hemi5 circle{transform-box:fill-box;transform-origin:center}
+#hemi5 .base{animation:seat .4s var(--over) both}
+#hemi5 .fill{animation:seat .3s var(--over) both}
+#hemi5 .lose{animation:seat .3s var(--over) both, fadeOut .35s linear forwards}
+#meio{left:535px;top:470px;width:10px;height:520px;border-left:10px dashed var(--amarelo);animation:pop .4s var(--ease) calc(var(--s5) + 4.8s) both}
+#meioLbl{left:0;top:415px;width:1080px;text-align:center;font-size:36px;font-weight:700;color:var(--amarelo);animation:pop .4s var(--ease) calc(var(--s5) + 4.8s) both}
+#maioria{left:290px;top:1040px;width:500px;text-align:center;font-size:64px;font-weight:900;letter-spacing:.04em;color:var(--branco);background:var(--verde);padding:18px 0;border-radius:999px;animation:pop .5s var(--over) calc(var(--s5) + 5.3s) both, fadeOut .3s linear calc(var(--s5) + 7.5s) forwards}
+#trava{left:240px;top:1020px;width:600px;display:flex;align-items:center;justify-content:center;gap:24px;font-size:84px;font-weight:900;letter-spacing:.04em;color:#FF4D4D;border:8px solid #FF4D4D;border-radius:24px;padding:14px 0;background:rgba(8,32,79,.9);animation:stampIn .45s var(--over) calc(var(--s5) + 7.9s) both;--r:-6deg}
+#trava svg{width:84px;height:84px}
+
+/* ---------- CENA 6: fechamento ---------- */
+#s6{--t:var(--s6);--tout:var(--end)}
+#cong6{left:180px;top:420px;width:720px;height:514px}
+#cong6 svg{width:720px;height:514px;overflow:visible}
+#g6bowl{animation:bowlGo 1s var(--over) calc(var(--s6) + .9s) both}
+#g6dome{animation:domeGo 1s var(--over) calc(var(--s6) + .9s) both}
+@keyframes bowlGo{to{transform:translateX(-40px)}}
+@keyframes domeGo{to{transform:translateX(40px)}}
+.casa{top:960px;width:260px;text-align:center;font-size:52px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;color:var(--amarelo);animation:pop .5s var(--over) calc(var(--s6) + 1.7s) both}
+#casaC{left:90px}#casaS{left:742px}
+#s6 .hl{top:1060px;font-size:104px;color:var(--branco);text-align:center}
+#s6 .l1{animation-delay:calc(var(--s6) + 2.3s)}#s6 .l2{animation-delay:calc(var(--s6) + 2.55s);color:var(--amarelo)}
+#prox{left:0;top:1330px;width:1080px;text-align:center;font-size:40px;font-weight:600;color:rgba(255,255,255,.75);animation:pop .5s var(--over) calc(var(--s6) + 3.6s) both}
+#marca{left:150px;top:1440px;display:flex;align-items:center;gap:30px;animation:pop .6s var(--over) calc(var(--s6) + 3.9s) both}
+#marca img{width:160px;height:160px;border-radius:50%;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#marca .h{font-size:40px;font-weight:700}
+#marca .h small{display:block;font-size:30px;font-weight:500;color:rgba(255,255,255,.65);margin-top:6px}
 </style>
 </head>
 <body>
 <div id="stage">
   <div id="losango" class="abs"></div>
+  <div id="ep" class="abs">EP. 1</div>
 
   <!-- CENA 1 -->
-  <div id="s1" class="abs">
-    <div id="h1" class="abs"><span class="l l1">Quem manda</span><span class="l l2">no Brasil?</span></div>
+  <div id="s1" class="sc abs">
+    <div class="hl abs"><span class="l l1">Quem manda</span><span class="l l2">no Brasil?</span></div>
     <div id="rule" class="abs"></div>
-
     <div id="cardL" class="card abs"><div class="in">
-      <!-- Palácio do Planalto (estilizado) -->
       <svg viewBox="0 0 200 140" fill="none"><rect x="8" y="22" width="184" height="14" rx="4" fill="var(--verde)"/>
-        <path d="M46 36 Q 30 78 46 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
-        <path d="M86 36 Q 70 78 86 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
-        <path d="M126 36 Q 110 78 126 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
-        <path d="M166 36 Q 150 78 166 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
-        <rect x="0" y="120" width="200" height="14" rx="4" fill="var(--verde)"/>
-        <polygon points="0,118 78,118 0,92" fill="var(--verde)" opacity=".8"/></svg>
+        <path d="M46 36 Q 30 78 46 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M86 36 Q 70 78 86 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <path d="M126 36 Q 110 78 126 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M166 36 Q 150 78 166 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/>
+        <rect x="0" y="120" width="200" height="14" rx="4" fill="var(--verde)"/><polygon points="0,118 78,118 0,92" fill="var(--verde)" opacity=".8"/></svg>
       <div class="lbl">o presidente</div></div></div>
-
     <div id="ou" class="abs"><span class="t">ou</span></div>
-
     <div id="cardR" class="card abs"><div class="in">
-      <!-- Congresso Nacional (estilizado): concha, torres, cúpula -->
-      <svg viewBox="0 0 210 150" fill="var(--amarelo)"><rect x="0" y="122" width="210" height="14" rx="4"/>
-        <path d="M12 82 A40 40 0 0 0 92 82 Z"/>
-        <rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/>
-        <path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>
+      <svg viewBox="0 0 210 150" fill="var(--amarelo)"><rect x="0" y="122" width="210" height="14" rx="4"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/>
+        <rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/><path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>
       <div class="lbl">o Congresso</div></div></div>
-
     <div id="sub1" class="abs">Executivo × Legislativo</div>
   </div>
 
   <!-- CENA 2 -->
-  <div id="s2" class="abs">
-    <div id="pVerde" class="panel abs"></div>
-    <div id="pAmarelo" class="panel abs"></div>
-
+  <div id="s2" class="sc abs">
+    <div id="pVerde" class="panel abs"></div><div id="pAmarelo" class="panel abs"></div>
     <div id="exec" class="big abs">Executivo</div>
     <div id="execSub" class="sub abs">presidente · governador · prefeito</div>
     <div id="execVerb" class="verb abs">administra:</div>
@@ -167,7 +215,6 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
       <div class="chip" id="c2"><svg viewBox="0 0 64 64" fill="none" stroke="var(--navy)" stroke-width="6" stroke-linecap="round"><path d="M14 58V14"/><path d="M14 14H54"/><path d="M14 26L34 14"/><path d="M48 14V34"/><rect x="40" y="34" width="16" height="12" rx="2" fill="var(--amarelo)" stroke="none"/><path d="M8 58h20"/></svg>obras</div>
       <div class="chip" id="c3"><svg viewBox="0 0 64 64"><rect x="8" y="12" width="48" height="36" rx="8" fill="var(--navy)"/><rect x="14" y="18" width="16" height="12" rx="2" fill="var(--amarelo)"/><rect x="34" y="18" width="16" height="12" rx="2" fill="var(--amarelo)"/><circle cx="20" cy="52" r="6" fill="var(--navy)"/><circle cx="44" cy="52" r="6" fill="var(--navy)"/><rect x="12" y="36" width="40" height="6" rx="2" fill="var(--amarelo)"/></svg>serviços</div>
     </div>
-
     <div id="legis" class="big abs">Legislativo</div>
     <div id="legisSub" class="sub abs">Congresso · assembleias · câmaras de vereadores</div>
     <svg id="hemi" class="abs" viewBox="0 0 420 150"></svg>
@@ -175,35 +222,103 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
       <div class="chip" id="c4"><svg viewBox="0 0 64 64" fill="none"><path d="M14 6h26l12 12v40H14z" fill="var(--branco)"/><path d="M40 6v12h12" fill="var(--amarelo)"/><path d="M22 30h22M22 38h22M22 46h12" stroke="var(--navy)" stroke-width="4" stroke-linecap="round"/><circle cx="44" cy="50" r="7" fill="var(--amarelo)"/></svg>cria as regras</div>
       <div class="chip" id="c5"><svg viewBox="0 0 64 64" fill="none" stroke="var(--amarelo)" stroke-width="7" stroke-linecap="round"><circle cx="27" cy="27" r="17"/><path d="M40 40L56 56"/></svg>fiscaliza</div>
     </div>
-
     <div id="lupa" class="abs"><svg viewBox="0 0 64 64" fill="none" stroke="var(--amarelo)" stroke-width="7" stroke-linecap="round"><circle cx="27" cy="27" r="17" fill="rgba(255,223,0,.18)"/><path d="M40 40L56 56"/></svg></div>
-
-    <div id="cap1" class="cap abs">Os dois, mas em coisas diferentes.</div>
-    <div id="cap2" class="cap abs">O <i>Executivo</i> (presidente, governador e prefeito) administra: dinheiro, obras, serviços.</div>
-    <div id="cap3" class="cap abs">O <b>Legislativo</b> cria as regras e fiscaliza quem administra.</div>
+    <div class="cap dark abs" style="--t:var(--s2);--d:2.6s">Os dois, mas em coisas diferentes.</div>
+    <div class="cap dark abs" style="--t:calc(var(--s2) + 2.6s);--d:4.2s">O <i>Executivo</i> (presidente, governador e prefeito) administra: dinheiro, obras, serviços.</div>
+    <div class="cap dark abs" style="--t:calc(var(--s2) + 6.8s);--d:4.2s">O <b>Legislativo</b> cria as regras e fiscaliza quem administra.</div>
   </div>
 
-  <div id="ep" class="abs">EP. 1</div>
+  <!-- CENA 3 -->
+  <div id="s3" class="sc abs">
+    <div class="hl abs"><span class="l l1">Ninguém faz</span><span class="l l2">lei sozinho</span></div>
+    <div id="bPres" class="bloco pres abs"><svg viewBox="0 0 200 140" fill="none"><rect x="8" y="22" width="184" height="14" rx="4" fill="var(--verde)"/><path d="M46 36 Q 30 78 46 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M86 36 Q 70 78 86 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M126 36 Q 110 78 126 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M166 36 Q 150 78 166 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><rect x="0" y="120" width="200" height="14" rx="4" fill="var(--verde)"/><polygon points="0,118 78,118 0,92" fill="var(--verde)" opacity=".8"/></svg>Presidente</div>
+    <div id="bCong" class="bloco cong abs"><svg viewBox="0 0 210 150" fill="var(--amarelo)"><rect x="0" y="122" width="210" height="14" rx="4"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/><rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/><path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>Congresso</div>
+    <div id="doc" class="abs"><div class="paper"><div class="tt">PROJETO DE LEI</div><div class="ln"></div><div class="ln"></div><div class="ln s"></div>
+      <div id="stAprov" class="stamp">aprovado</div>
+      <div id="stVeto" class="stamp">vetado<div class="strike"></div></div>
+      <div id="stDerr" class="stamp">veto derrubado</div></div></div>
+    <div id="tg1" class="tag g abs">propõe</div>
+    <div id="tg2" class="tag y abs">aprova</div>
+    <div id="tg3" class="tag g abs">veta</div>
+    <div id="tg4" class="tag y abs">derruba o veto</div>
+    <div class="cap light abs" style="--t:var(--s3);--d:2.5s">Nenhum dos dois faz lei sozinho.</div>
+    <div class="cap light abs" style="--t:calc(var(--s3) + 2.5s);--d:4s">O <i>presidente</i> pode propor uma lei, mas quem aprova é o <b>Congresso</b>.</div>
+    <div class="cap light abs" style="--t:calc(var(--s3) + 6.5s);--d:3.5s">O <b>Congresso</b> pode aprovar uma lei, mas o <i>presidente</i> pode vetar.</div>
+    <div class="cap light abs" style="--t:calc(var(--s3) + 10s);--d:3.8s">E o <b>Congresso</b> ainda pode derrubar o veto.</div>
+  </div>
+
+  <!-- CENA 4 -->
+  <div id="s4" class="sc abs">
+    <div class="hl abs"><span class="l l1">E o dinheiro?</span></div>
+    <div id="bGov" class="bloco pres abs"><svg viewBox="0 0 200 140" fill="none"><rect x="8" y="22" width="184" height="14" rx="4" fill="var(--verde)"/><path d="M46 36 Q 30 78 46 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M86 36 Q 70 78 86 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M126 36 Q 110 78 126 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><path d="M166 36 Q 150 78 166 120" stroke="var(--verde)" stroke-width="10" stroke-linecap="round"/><rect x="0" y="120" width="200" height="14" rx="4" fill="var(--verde)"/><polygon points="0,118 78,118 0,92" fill="var(--verde)" opacity=".8"/></svg>Governo</div>
+    <div id="bCong4" class="bloco cong abs"><svg viewBox="0 0 210 150" fill="var(--amarelo)"><rect x="0" y="122" width="210" height="14" rx="4"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/><rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/><path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>Congresso</div>
+    <div id="coins" class="abs"><div id="co1" class="coin">R$</div><div id="co2" class="coin">R$</div><div id="co3" class="coin">R$</div></div>
+    <div id="orcTag" class="abs">orçamento</div>
+    <div id="barra" class="abs"></div>
+    <div id="labels" class="abs"></div>
+    <div class="cap light abs" style="--t:var(--s4);--d:3.5s">Com o dinheiro é igual: o <i>governo</i> propõe o orçamento,</div>
+    <div class="cap light abs" style="--t:calc(var(--s4) + 3.5s);--d:6.2s">o <b>Congresso</b> decide onde cada real vai.</div>
+  </div>
+
+  <!-- CENA 5 -->
+  <div id="s5" class="sc abs">
+    <div class="hl abs"><span class="l l1">Base aliada</span></div>
+    <div class="sub5 abs">o governo precisa de maioria no Congresso</div>
+    <svg id="hemi5" class="abs" viewBox="0 0 960 520"></svg>
+    <div id="meioLbl" class="abs">metade</div>
+    <div id="meio" class="abs"></div>
+    <div id="maioria" class="abs">MAIORIA</div>
+    <div id="trava" class="abs"><svg viewBox="0 0 64 64" fill="none" stroke="#FF4D4D" stroke-width="7" stroke-linecap="round"><rect x="12" y="28" width="40" height="30" rx="6" fill="#FF4D4D" stroke="none"/><path d="M20 28V20a12 12 0 0 1 24 0v8"/></svg>TRAVA</div>
+    <div class="cap light abs" style="--t:var(--s5);--d:3.5s">Por isso você ouve falar em <b>base aliada</b>:</div>
+    <div class="cap light abs" style="--t:calc(var(--s5) + 3.5s);--d:4s">o <i>governo</i> precisa de maioria no <b>Congresso</b> para aprovar o que quer.</div>
+    <div class="cap light abs" style="--t:calc(var(--s5) + 7.5s);--d:3s">Sem maioria, trava.</div>
+  </div>
+
+  <!-- CENA 6 -->
+  <div id="s6" class="sc abs">
+    <div id="cong6" class="abs"><svg viewBox="0 0 210 150" fill="var(--amarelo)">
+      <g id="g6bowl"><rect x="0" y="122" width="104" height="14" rx="4"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/></g>
+      <g id="g6towers"><rect x="98" y="8" width="12" height="114" rx="3"/><rect x="116" y="8" width="12" height="114" rx="3"/><rect x="106" y="60" width="14" height="8"/><rect x="96" y="122" width="34" height="14" rx="4"/></g>
+      <g id="g6dome"><rect x="122" y="122" width="88" height="14" rx="4"/><path d="M122 122 A40 40 0 0 1 202 122 Z"/></g></svg></div>
+    <div id="casaC" class="casa abs">Câmara</div><div id="casaS" class="casa abs">Senado</div>
+    <div class="hl abs"><span class="l l1">O Congresso</span><span class="l l2">são dois</span></div>
+    <div id="prox" class="abs">no próximo vídeo: as duas casas</div>
+    <div id="marca" class="abs"><img src="avatar.png" alt=""><div class="h">Assim Funciona o Brasil<small>@assim_funciona_o_brasil</small></div></div>
+    <div class="cap light abs" style="--t:var(--s6);--d:3.2s">Mas o <b>Congresso</b> não é um lugar só. São dois.</div>
+    <div class="cap light hold abs" style="--t:calc(var(--s6) + 3.3s);--d:2.7s">É o próximo vídeo.</div>
+  </div>
 </div>
 <script>
-// hemiciclo: 3 fileiras, cores por terço (esquerda / centro / direita)
 (function(){
+  const NS='http://www.w3.org/2000/svg';
+  // cena 2: hemiciclo pequeno, cores por terço (só ilustra a paleta)
   const svg=document.getElementById('hemi');
-  const rows=[[72,8],[108,11],[144,14]];
-  const cols=['#E03A3E','#8A4DE8','#2F8BEF'];
-  let k=0;
-  rows.forEach(([r,n])=>{
-    for(let i=0;i<n;i++){
-      const f=(i+.5)/n, a=Math.PI+f*Math.PI;
-      const cx=210+r*Math.cos(a), cy=148+r*Math.sin(a);
-      const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
-      c.setAttribute('cx',cx.toFixed(1));c.setAttribute('cy',cy.toFixed(1));c.setAttribute('r','13');
-      c.setAttribute('fill',cols[f<1/3?0:(f<2/3?1:2)]);
-      c.style.animationDelay=(6.7+k*0.025).toFixed(3)+'s';
-      svg.appendChild(c);k++;
-    }
+  const cols=['#E03A3E','#8A4DE8','#2F8BEF']; let k=0;
+  [[72,8],[108,11],[144,14]].forEach(([r,n])=>{for(let i=0;i<n;i++){const f=(i+.5)/n,a=Math.PI+f*Math.PI;
+    const c=document.createElementNS(NS,'circle');c.setAttribute('cx',(210+r*Math.cos(a)).toFixed(1));c.setAttribute('cy',(148+r*Math.sin(a)).toFixed(1));c.setAttribute('r','13');
+    c.setAttribute('fill',cols[f<1/3?0:(f<2/3?1:2)]);c.style.animationDelay=(T.s2+1.7+k*0.025).toFixed(3)+'s';svg.appendChild(c);k++;}});
+
+  // cena 4: barra do orçamento
+  const segs=[['saúde',28,'#FFDF00'],['educação',24,'#D9E04A'],['segurança',16,'#9FD66A'],['transporte',16,'#5BC46F'],['outros',16,'#19B75A']];
+  const barra=document.getElementById('barra'), labels=document.getElementById('labels');
+  segs.forEach(([n,w,c],i)=>{const d=document.createElement('div');d.style.width=w+'%';d.style.background=c;d.style.animationDelay=(T.s4+4.8+i*.45).toFixed(2)+'s';barra.appendChild(d);
+    const l=document.createElement('div');l.style.width=w+'%';l.textContent=n;l.style.animationDelay=(T.s4+5+i*.45).toFixed(2)+'s';labels.appendChild(l);});
+
+  // cena 5: hemiciclo grande; preenchimento por ângulo (esquerda → direita) até passar da metade; depois perde cadeiras
+  const h5=document.getElementById('hemi5'); const seats=[];
+  [[200,20],[254,24],[308,28],[362,32],[416,36],[470,40]].forEach(([r,n])=>{for(let i=0;i<n;i++){const f=(i+.5)/n,a=Math.PI+f*Math.PI;seats.push({x:480+r*Math.cos(a),y:500+r*Math.sin(a),f});}});
+  seats.sort((p,q)=>p.f-q.f);
+  const total=seats.length, maj=Math.floor(total*.51)+1, loseFrom=Math.floor(total*.40);
+  seats.forEach((s,i)=>{
+    const b=document.createElementNS(NS,'circle');b.setAttribute('cx',s.x.toFixed(1));b.setAttribute('cy',s.y.toFixed(1));b.setAttribute('r','17');b.setAttribute('fill','#27406F');b.setAttribute('class','base');
+    b.style.animationDelay=(T.s5+.3+i*.006).toFixed(3)+'s';h5.appendChild(b);
+    if(i<maj){const g=document.createElementNS(NS,'circle');g.setAttribute('cx',s.x.toFixed(1));g.setAttribute('cy',s.y.toFixed(1));g.setAttribute('r','17');g.setAttribute('fill','#19B75A');
+      const lose=i>=loseFrom; g.setAttribute('class',lose?'lose':'fill');
+      const tf=(T.s5+2.6+i*.022).toFixed(3)+'s';
+      g.style.animationDelay=lose?tf+','+(T.s5+7.6+(maj-i)*.03).toFixed(3)+'s':tf; h5.appendChild(g);}
   });
 })();
+window.TOTAL=T.end;
 window.seek=function(ms){document.getAnimations().forEach(a=>{a.currentTime=ms;});return document.getAnimations().length;};
 </script>
 </body>

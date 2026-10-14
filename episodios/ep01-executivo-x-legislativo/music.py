@@ -3,7 +3,7 @@ from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 SR = 44100
-DUR = 16.5
+DUR = 57.0
 BPM = 100
 BEAT = 60 / BPM
 BAR = 4 * BEAT
@@ -11,7 +11,8 @@ BAR = 4 * BEAT
 def midi(n): return 440.0 * 2 ** ((n - 69) / 12)
 
 # D - A - Bm - G (triads, midi), one bar each, loop
-CHORDS = [[62, 66, 69], [57, 61, 64], [59, 62, 66], [55, 59, 62]]
+CHORDS = [[62, 66, 69], [57, 61, 64], [59, 62, 66], [55, 59, 62],
+          [62, 66, 69], [57, 61, 64], [64, 67, 71], [57, 61, 64]]  # A: D A Bm G / B: D A Em A
 
 N = int(SR * DUR)
 t = np.arange(N) / SR
@@ -35,7 +36,7 @@ def env_adsr(n, a, d, s, r):
 pad = np.zeros(N)
 nbars = int(np.ceil(DUR / BAR))
 for bi in range(nbars):
-    ch = CHORDS[bi % 4]
+    ch = CHORDS[bi % 8]
     s0 = int(bi * BAR * SR); s1 = min(N, int((bi + 1) * BAR * SR) + int(0.4 * SR))
     n = s1 - s0
     tt = np.arange(n) / SR
@@ -58,7 +59,7 @@ pattern = [0, 1, 2, 3, 2, 1, 2, 3]   # index into chord tones (+octave)
 vel = [1.0, .7, .8, .6, .9, .6, .8, .5]
 tt_step = 0.0
 while tt_step < DUR:
-    bi = int(tt_step // BAR) % 4
+    bi = int(tt_step // BAR) % 8
     ch = CHORDS[bi]
     tones = ch + [ch[0] + 12]
     m = tones[pattern[k % 8]] + 12
