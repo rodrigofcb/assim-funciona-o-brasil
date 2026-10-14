@@ -45,21 +45,22 @@ def svg(c):
   <circle cx="{CX}" cy="{CY}" r="64" fill="{c['los']}"/>
 </svg>'''
 
-with sync_playwright() as p:
-    b = p.chromium.launch()
-    pg = b.new_page(viewport={"width": S, "height": S})
-    for name, c in VARIANTS.items():
-        (HERE / f"avatar_{name}.svg").write_text(svg(c), encoding="utf-8")
-        pg.set_content(f'<body style="margin:0">{svg(c)}</body>')
-        pg.screenshot(path=str(HERE / f"avatar_{name}.png"))
-    b.close()
+if __name__ == "__main__":
+    with sync_playwright() as p:
+        b = p.chromium.launch()
+        pg = b.new_page(viewport={"width": S, "height": S})
+        for name, c in VARIANTS.items():
+            (HERE / f"avatar_{name}.svg").write_text(svg(c), encoding="utf-8")
+            pg.set_content(f'<body style="margin:0">{svg(c)}</body>')
+            pg.screenshot(path=str(HERE / f"avatar_{name}.png"))
+        b.close()
 
-# circular preview of both, side by side, as Instagram would crop
-prev = Image.new("RGB", (1180, 620), "#111")
-for i, name in enumerate(VARIANTS):
-    im = Image.open(HERE / f"avatar_{name}.png").resize((500, 500), Image.LANCZOS)
-    mask = Image.new("L", (500, 500), 0)
-    ImageDraw.Draw(mask).ellipse((0, 0, 499, 499), fill=255)
-    prev.paste(im, (60 + i * 560, 60), mask)
-prev.save(HERE / "preview_circulos.png")
-print("ok")
+    # circular preview of both, side by side, as Instagram would crop
+    prev = Image.new("RGB", (1180, 620), "#111")
+    for i, name in enumerate(VARIANTS):
+        im = Image.open(HERE / f"avatar_{name}.png").resize((500, 500), Image.LANCZOS)
+        mask = Image.new("L", (500, 500), 0)
+        ImageDraw.Draw(mask).ellipse((0, 0, 499, 499), fill=255)
+        prev.paste(im, (60 + i * 560, 60), mask)
+    prev.save(HERE / "preview_circulos.png")
+    print("ok")
