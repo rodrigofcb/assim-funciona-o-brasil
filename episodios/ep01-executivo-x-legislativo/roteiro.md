@@ -1,6 +1,8 @@
 # Ep. 1: Quem manda, o presidente ou o Congresso?
 
-Duração alvo: 55 s. Status: cenas 1 e 2 renderizadas (`ep1_cenas1-2.mp4`), sem narração.
+Duração: 68 s. Status: `ep1_final.mp4` renderizado com narração do Rodrigo (opção A: só acabamento), trilha procedural com ducking e legendas sincronizadas.
+
+Áudio: `audio/narracao_bruta.wav` (gravação do celular) → `ferramentas/voz.py` → `audio/narracao_A_acabamento.wav` → mix com `music.wav` em `audio/mix_final.wav`. Tempos das cenas ajustados em `sync.py` a partir da gravação.
 
 ## Cena 1 (0–5 s)
 Visual: dois ícones frente a frente, Planalto e Congresso; "ou" pulsa no instante de tensão.

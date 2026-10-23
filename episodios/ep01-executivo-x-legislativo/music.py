@@ -3,7 +3,7 @@ from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 SR = 44100
-DUR = 57.0
+DUR = 68.5
 BPM = 100
 BEAT = 60 / BPM
 BAR = 4 * BEAT

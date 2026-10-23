@@ -2,3 +2,5 @@ frames/
 preview/
 *.wav
 __pycache__/
+_tmp/
+render.log
