@@ -42,7 +42,7 @@ window.TL = {
    "exec": 12.6, "execsub": 13.05, "adm": 13.9, "din": 14.9, "obr": 15.8, "ser": 16.7, "s2bout": 17.9,
    "legis": 18.7, "legsub": 19.2, "cria": 20.0, "fisc": 20.9, "beam": 21.1, "s2cout": 24.1,
    "s3t": 26.1, "aprova": 27.2, "viaja1": 27.9, "sanc": 29.2, "veta": 30.5, "viaja2": 31.3, "derruba": 32.6, "n257": 33.5, "n41": 34.2, "s3out": 36.3,
-   "s4t": 37.6, "seats": 38.0, "n513": 38.3, "caso": 39.3, "sim": 40.3, "nao": 42.3, "lim": 43.9, "rej": 45.2, "s4out": 48.0,
+   "s4t": 36.8, "seats": 38.0, "n513": 38.3, "caso": 39.3, "sim": 40.3, "nao": 42.3, "lim": 43.9, "rej": 45.2, "s4out": 48.0,
    "reset": 48.3, "s5t": 48.9, "votos": 49.9, "com": 51.0, "div": 53.0, "contra": 54.3, "resp": 56.0, "s5out": 58.3,
    "marca": 59.6, "prox": 60.8, "cred": 61.2, "fade": 62.7
  },
