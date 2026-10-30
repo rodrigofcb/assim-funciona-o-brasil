@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>blueprint</title>
+<script src="engine3d.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#061233;font-family:"Inter Display","Inter",system-ui,sans-serif}
+#bg{position:absolute;inset:0;background:radial-gradient(90% 60% at 50% 40%, #0C2A6B 0%, #071A48 45%, #040D2A 100%)}
+svg{position:absolute;inset:0}
+.grid{stroke:#5F9BFF;stroke-opacity:.14;stroke-width:1.2;fill:none}
+.ln{stroke:#B8E4FF;stroke-width:1.7;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.glow{stroke:#4FB8FF;stroke-width:6;fill:none;stroke-opacity:.35;filter:url(#blur)}
+.lbl{position:absolute;color:#B8E4FF;font-weight:700;font-size:34px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.lbl small{display:block;font-size:22px;letter-spacing:.08em;opacity:.6;font-weight:500;margin-top:6px}
+#grain{position:absolute;inset:-10%;opacity:.1;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+#vig{position:absolute;inset:0;background:radial-gradient(115% 85% at 50% 45%, rgba(0,0,0,0) 50%, rgba(0,0,0,.6) 100%)}
+</style></head>
+<body>
+<div id="bg"></div>
+<svg id="s" viewBox="0 0 1080 1920"><defs><filter id="blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+  <path id="g" class="grid"/><path id="h" class="glow"/><path id="l" class="ln"/></svg>
+<div class="lbl" style="left:84px;top:150px">Praça dos Três Poderes<small>Brasília · blueprint 3D (teste)</small></div>
+<div id="grain"></div><div id="vig"></div>
+<script>
+// posições provisórias (metros): Congresso na origem; Planalto a nordeste. Serão substituídas pelas coordenadas do OSM.
+const world = [
+  ...E3.T(E3.congresso(), 0, 0, 0, 0),
+  ...E3.T(E3.planalto(), 330, 150, 0, 0),
+];
+const grid = E3.grid(150, 40, 700, 50);
+function draw(az, el, dist, fov, tx, ty, tz) {
+  const pos = [tx + dist * Math.cos(el) * Math.cos(az), ty + dist * Math.cos(el) * Math.sin(az), tz + dist * Math.sin(el)];
+  const c = E3.camera(pos, [tx, ty, tz], fov, 1080, 1920);
+  document.getElementById('g').setAttribute('d', grid.map(p => E3.path(c, p)).join(''));
+  const d = world.map(p => E3.path(c, p)).join('');
+  document.getElementById('l').setAttribute('d', d); document.getElementById('h').setAttribute('d', d);
+}
+window.draw = draw;
+// vista padrão: do sudoeste, 28° de elevação
+draw(-150 * Math.PI / 180, 28 * Math.PI / 180, 620, 46, 150, 40, 30);
+</script>
+</body></html>
