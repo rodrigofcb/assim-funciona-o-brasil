@@ -84,6 +84,12 @@ for beat, kind in TL["sfx"]:
     elif kind in ("thrum",): place(sig, t, pan=-0.35 if "pres" in beat else (0.35 if "cong" in beat else 0))
     else: place(sig, t, pan=rng.uniform(-0.15, 0.15))
 
+# riser opcional: ruído subindo + drone grave crescente durante a janela TL.riser
+if TL.get("riser"):
+    t0, t1 = TL["riser"]; n = int((t1 - t0) * SR); tt = np.arange(n) / SR; k = tt / (t1 - t0)
+    ris = sweep_noise(n, 120, 2600, 0.7) * (k ** 1.6) * 0.5
+    drone = np.sin(2 * np.pi * (38 + 14 * k) * tt) * (k ** 2) * 0.35
+    place(ris + drone, t0, pan=0.0)
 mix = np.stack([L, R], 1)
 peak = np.abs(mix).max(); mix = mix / peak * 0.8 if peak > 0 else mix
 (folder / "out").mkdir(exist_ok=True)
