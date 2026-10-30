@@ -1,0 +1,131 @@
+{
+ "fonte": "Politicômetro (politicometro.org), consultado em 30/10/2026, a partir de dados abertos da Câmara dos Deputados, do Senado Federal e do TSE; 'hoje' = em exercício; '2027' = quem toma posse em fev/2027",
+ "classificacao": "Bolognesi, Ribeiro e Codato, 'Uma nova classificação ideológica dos partidos políticos brasileiros', Dados, 2023 (survey com 519 cientistas políticos, 2018; régua 0-10). Blocos como o Politicômetro aplica: esquerda ≤ 4,49; centro 4,5-5,5; direita > 5,5; 'sem nota' = partido criado depois da pesquisa",
+ "ideologia_partido": {
+  "PT": "esquerda",
+  "PCdoB": "esquerda",
+  "PSOL": "extrema-esquerda",
+  "PDT": "centro-esquerda",
+  "PSB": "centro-esquerda",
+  "PV": "centro",
+  "REDE": "centro",
+  "CIDADANIA": "centro",
+  "AVANTE": "centro-direita",
+  "SOLIDARIEDADE": "centro-direita",
+  "MDB": "direita",
+  "PSDB": "direita",
+  "PSD": "direita",
+  "PP": "direita",
+  "PL": "direita",
+  "PODE": "direita",
+  "REPUBLICANOS": "direita",
+  "NOVO": "direita",
+  "UNIÃO": "sem nota (fusão, 2022)",
+  "PRD": "sem nota (fusão, 2023)",
+  "MISSÃO": "sem nota",
+  "Sem partido": "sem partido"
+ },
+ "composicao": {
+  "camara_hoje": {
+   "PL": 98,
+   "PT": 66,
+   "UNIÃO": 50,
+   "PSD": 48,
+   "PP": 47,
+   "REPUBLICANOS": 43,
+   "MDB": 38,
+   "PODE": 27,
+   "PSDB": 17,
+   "PSB": 17,
+   "PSOL": 13,
+   "PCdoB": 11,
+   "PDT": 9,
+   "PV": 6,
+   "NOVO": 5,
+   "AVANTE": 5,
+   "SOLIDARIEDADE": 4,
+   "REDE": 3,
+   "PRD": 3,
+   "CIDADANIA": 2,
+   "MISSÃO": 1
+  },
+  "camara_2027": {
+   "PL": 121,
+   "PT": 70,
+   "UNIÃO": 46,
+   "PSD": 43,
+   "PP": 41,
+   "REPUBLICANOS": 41,
+   "MDB": 36,
+   "PODE": 27,
+   "PSB": 15,
+   "PSOL": 14,
+   "PSDB": 11,
+   "PCdoB": 11,
+   "NOVO": 10,
+   "PV": 7,
+   "PDT": 6,
+   "PRD": 5,
+   "AVANTE": 5,
+   "SOLIDARIEDADE": 2,
+   "REDE": 1,
+   "MISSÃO": 1
+  },
+  "senado_hoje": {
+   "PL": 15,
+   "PSD": 14,
+   "MDB": 9,
+   "PT": 9,
+   "PP": 8,
+   "PSB": 7,
+   "REPUBLICANOS": 6,
+   "PSDB": 4,
+   "UNIÃO": 3,
+   "PODE": 3,
+   "AVANTE": 1,
+   "Sem partido": 1,
+   "PDT": 1
+  },
+  "senado_2027": {
+   "PL": 28,
+   "PT": 9,
+   "MDB": 8,
+   "PP": 6,
+   "REPUBLICANOS": 6,
+   "PSD": 5,
+   "UNIÃO": 5,
+   "PSB": 4,
+   "NOVO": 3,
+   "PSDB": 2,
+   "PODE": 2,
+   "REDE": 1,
+   "Sem partido": 1,
+   "PDT": 1
+  }
+ },
+ "blocos": {
+  "camara_hoje": {
+   "direita": 332,
+   "esquerda": 116,
+   "sem nota": 54,
+   "centro": 11
+  },
+  "camara_2027": {
+   "direita": 337,
+   "esquerda": 116,
+   "sem nota": 52,
+   "centro": 8
+  },
+  "senado_hoje": {
+   "direita": 60,
+   "esquerda": 17,
+   "sem nota": 4
+  },
+  "senado_2027": {
+   "direita": 60,
+   "esquerda": 14,
+   "sem nota": 6,
+   "centro": 1
+  }
+ }
+}
