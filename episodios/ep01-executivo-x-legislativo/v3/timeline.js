@@ -30,7 +30,7 @@ window.TL = {
  "beats": {
    "quem": 0.35, "manda": 0.6, "brasil": 0.95, "bsb": 2.6, "aviao": 3.4, "praca": 5.2,
    "pres": 6.4, "buildP": 6.2, "ou": 7.6, "cong": 7.9, "buildC": 7.7, "s1out": 9.9,
-   "osdois": 10.5, "mas": 11.4, "s2aout": 12.2,
+   "wall": 9.5, "osdois": 10.5, "mas": 11.4, "s2aout": 12.2, "wallout": 12.3,
    "exec": 13.2, "execsub": 13.7, "adm": 14.4, "din": 14.9, "obr": 15.8, "ser": 16.7, "s2bout": 17.9,
    "legis": 18.7, "legsub": 19.2, "cria": 20.0, "fisc": 20.9, "beam": 21.1, "s2cout": 24.1
  },
@@ -39,7 +39,7 @@ window.TL = {
  "sfx": [
    ["quem", "tick"], ["manda", "tick"], ["brasil", "impact"], ["bsb", "thrum"], ["aviao", "pop"], ["praca", "impact"],
    ["pres", "thrum"], ["buildP", "fill"], ["ou", "tick"], ["cong", "thrum"], ["buildC", "fill"], ["s1out", "whoosh"],
-   ["osdois", "impact"], ["mas", "tick"], ["s2aout", "whoosh"],
+   ["wall", "fill", {"ticks": 14, "dt": 0.07}], ["osdois", "impact"], ["mas", "tick"], ["wallout", "whoosh"],
    ["exec", "pop"], ["execsub", "tick"], ["adm", "tick"], ["din", "fill"], ["obr", "fill"], ["ser", "fill"],
    ["s2bout", "whoosh"], ["legis", "pop"], ["legsub", "tick"], ["cria", "tick"], ["fisc", "tick"], ["beam", "sweep"], ["s2cout", "whoosh"]
  ],

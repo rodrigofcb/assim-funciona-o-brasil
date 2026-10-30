@@ -57,8 +57,8 @@ def sweep():
     n = int(2.1 * SR); t = np.arange(n) / SR
     base = bp(rng.normal(0, 1, n), 500, 1800) * (0.5 - 0.5 * np.cos(2 * np.pi * t / (n / SR)))  # sino no tempo
     return base * 0.35
-def fill():
-    k, dt = TL.get("fill", {}).get("ticks", 6), TL.get("fill", {}).get("dt", 0.1)
+def fill(opts=None):
+    o = {**TL.get("fill", {}), **(opts or {})}; k, dt = o.get("ticks", 6), o.get("dt", 0.1)
     n = int((k * dt + 0.1) * SR); out = np.zeros(n)
     for i in range(k):
         s = tick(900 * (1.09 ** i)); o = int(i * dt * SR); out[o:o + len(s)] += s * (0.7 + 0.3 * i / k)
@@ -77,8 +77,9 @@ def place(sig, t, pan=0.0, move=None):
     else:
         p = np.linspace(move[0], move[1], n); L[o:o + n] += sig * np.cos((p + 1) * np.pi / 4); R[o:o + n] += sig * np.sin((p + 1) * np.pi / 4)
 
-for beat, kind in TL["sfx"]:
-    t = TL["beats"][beat]; sig = BANK[kind]()
+for ev in TL["sfx"]:
+    beat, kind = ev[0], ev[1]; opts = ev[2] if len(ev) > 2 else None
+    t = TL["beats"][beat]; sig = BANK[kind](opts) if kind == "fill" else BANK[kind]()
     if kind == "whoosh": d = rng.choice([-1, 1]); place(sig, t, move=(-0.8 * d, 0.8 * d))
     elif kind == "sweep": place(sig, t, move=(0.8, -0.8))
     elif kind in ("thrum",): place(sig, t, pan=-0.35 if "pres" in beat else (0.35 if "cong" in beat else 0))
