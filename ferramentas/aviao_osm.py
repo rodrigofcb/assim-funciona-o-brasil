@@ -14,7 +14,7 @@ def azeq(lon, lat):
 src, dst = sys.argv[1], sys.argv[2]
 d = json.load(open(src, encoding="utf-8"))
 roads = {"eixo": [], "pri": [], "sec": []}; water = []
-EIXO_NAMES = ("Eixo Monumental", "Eixo Rodoviário", "Eixo Rodoviario", "Eixo Rodoviário Norte", "Eixo Rodoviário Sul", "Eixo L", "Eixo W", "Eixão")
+EIXO_NAMES = ("Eixo Monumental", "Eixo Rodoviário", "Eixo Rodoviario", "Eixão", "S1", "N1", "Via N1", "Via S1")  # fuselagem (S1/N1) + asas (Eixo Rodoviário)
 def dedupe(pts):
     out = []
     for p in pts:
@@ -25,7 +25,7 @@ for f in d["features"]:
     p, g = f["properties"], f["geometry"]
     if g["type"] == "LineString" and "highway" in p:
         line = dedupe([azeq(*c) for c in g["coordinates"]]); hw = p["highway"]; name = p.get("name", "") or ""
-        if any(name.startswith(n) for n in EIXO_NAMES): roads["eixo"].append(line); nE += 1
+        if any(name == n or name.startswith(n + " ") for n in EIXO_NAMES) and hw in ("trunk", "motorway", "primary", "trunk_link"): roads["eixo"].append(line); nE += 1
         elif hw in ("motorway", "trunk", "primary", "motorway_link", "trunk_link", "primary_link"): roads["pri"].append(line)
         else: roads["sec"].append(line)
     elif g["type"] in ("Polygon", "MultiPolygon") and p.get("natural") == "water":

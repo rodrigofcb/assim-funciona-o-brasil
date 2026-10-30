@@ -91,15 +91,16 @@ window.Mapa3D = (() => {
     const aDF = 1 - fadeIn(h, 12000, 5000);
     if (aDF > 0 && BR.uf.DF) stroke(c, BR.uf.DF.rings, 1.6, 0.6 * aDF * fadeIn(h, 5000000, 400000), COL.line);
     // Brasília pulsando enquanto é um ponto
-    const aDot = (1 - fadeIn(h, 300000, 80000)) * fadeIn(h, 9000000, 5000000);
+    const aDot = (1 - fadeIn(h, 140000, 60000)) * fadeIn(h, 9000000, 5000000);
     if (aDot > 0.01) { const q = P(c, [0, 0, 0]); const pul = 0.5 + 0.5 * Math.sin(t * 2 * Math.PI * 1.1);
       ctx.beginPath(); ctx.arc(q[0], q[1], 9 + 18 * pul, 0, 7); ctx.strokeStyle = `rgba(${COL.y},${aDot * (0.9 - 0.7 * pul)})`; ctx.lineWidth = 3; ctx.stroke();
       ctx.beginPath(); ctx.arc(q[0], q[1], 7, 0, 7); ctx.fillStyle = `rgba(${COL.y},${aDot})`; ctx.fill(); }
     // cidade (avião): vias principais da região, do nível ~150 km até o detalhe
-    const aCid = fadeIn(h, 160000, 40000);
+    const aCid = fadeIn(h, 450000, 60000);
     if (aCid > 0 && AV) {
       fill(c, AV.water, 0.18 * aCid, '80,150,255'); stroke(c, AV.water, px(6), 0.35 * aCid, '120,190,255', true);
-      stroke(c, AV.roads.sec, px(14), 0.22 * aCid); stroke(c, AV.roads.pri, px(26), 0.55 * aCid); stroke(c, AV.roads.eixo, px(40), 0.95 * aCid, COL.br);
+      stroke(c, AV.roads.sec, px(14), 0.22 * aCid); stroke(c, AV.roads.pri, px(26), 0.55 * aCid);
+      stroke(c, AV.roads.eixo, px(140), 0.18 * aCid, COL.br); stroke(c, AV.roads.eixo, px(40), 0.95 * aCid, COL.br);
     }
     // detalhe local (Esplanada): entra abaixo de ~20 km
     const aLoc = fadeIn(h, 20000, 4000);
