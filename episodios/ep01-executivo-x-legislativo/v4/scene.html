@@ -56,7 +56,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 
 /* véu: gradiente do fundo atrás de cada bloco de texto, para o mapa não embolar com as letras.
    Os véus ficam numa camada própria (#veils, logo acima do canvas), para nunca escurecer o texto de outro bloco. */
-:root{--veil:.70}
+:root{--veil:0}   /* 0 = sem véu (decisão de 30/10: só a base mais rala); .70 para reativar */
 #veils{position:absolute;inset:0;pointer-events:none}
 .veil{position:absolute;animation:veilIn .6s var(--ease) var(--in) both, veilOut .45s var(--ease) var(--out) forwards}
 .veil::before{content:"";position:absolute;left:-240px;right:-240px;top:-130px;bottom:-120px;
@@ -230,12 +230,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
   document.querySelectorAll('[data-in]').forEach(e=>e.style.setProperty('--in', TL.beats[e.dataset.in]+'s'));
   document.querySelectorAll('[data-out]').forEach(e=>e.style.setProperty('--out', TL.beats[e.dataset.out]+'s'));
   document.querySelectorAll('.t,.cnt,.brand').forEach(b=>{const ins=[...b.querySelectorAll('[data-in]')].map(e=>TL.beats[e.dataset.in]).filter(x=>x!==undefined); if(ins.length) b.style.setProperty('--in', Math.min(...ins)+'s');});
+  if (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--veil')) > 0) {
   const stage=document.getElementById('stage'), veils=document.createElement('div'); veils.id='veils'; stage.insertBefore(veils, document.getElementById('dust'));
   const sr=stage.getBoundingClientRect();
   document.querySelectorAll('.t,.cnt,.brand,.src,.foot').forEach(b=>{const r=b.getBoundingClientRect(), cs=getComputedStyle(b);
     const v=document.createElement('div'); v.className='veil'+(b.matches('.src,.foot')?' small':'');
     v.style.cssText=`left:${r.left-sr.left}px;top:${r.top-sr.top}px;width:${r.width}px;height:${r.height}px;--in:${cs.getPropertyValue('--in').trim()||'0s'};--out:${cs.getPropertyValue('--out').trim()||'999s'}`;
-    veils.appendChild(v);});
+    veils.appendChild(v);}); }
   // contadores: um @keyframes por elemento (var() dentro de keyframes não anima a propriedade registrada)
   let css=''; document.querySelectorAll('.num').forEach((e,i)=>{const to=(e.style.getPropertyValue('--to')||'0').trim(); css+=`@keyframes cnt${i}{from{--n:0}to{--n:${to}}}`; e.style.animationName='cnt'+i;});
   const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
