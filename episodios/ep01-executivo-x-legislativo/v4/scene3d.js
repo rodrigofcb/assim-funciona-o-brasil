@@ -6,7 +6,7 @@
   // tema (window.THEME): col = cores compartilhadas com a base; col3d = sub (prédios-tema), no ("não"/"contra"), dim (assento vazio); glow = intensidades
   const T = window.THEME || {};
   const COL = Object.assign({ line: '184,228,255', glow: '79,184,255', g: '43,214,110', y: '255,223,0', w: '255,255,255' }, T.col || {});
-  Object.assign(COL, { sub: COL.line, no: COL.line, dim: COL.line }, T.col3d || {});
+  Object.assign(COL, { sub: COL.line, yes: COL.y, no: COL.line, dim: COL.line }, T.col3d || {});
   const GL = Object.assign({ model: 0.6, lit: 1.4, pulse: 1.5, hl: 1.2, seat: 0.08 }, T.glow || {});
   const sm = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
   const lerp = (a, b, k) => a + (b - a) * k;
@@ -137,12 +137,12 @@
     const dim = [COL.dim, 0.22, false];
     if (B.reset !== undefined && t >= B.reset) {
       const k = 1 - 0.75 * (1 - sm((t - B.reset) / 0.35));
-      if (idx < V5.com * sm((t - B.com) / 1.6)) return [COL.g, 0.95, true];
+      if (idx < V5.com * sm((t - B.com) / 1.6)) return [COL.yes, 0.95, true];
       if (idx >= V5.com && idx < V5.com + V5.div * sm((t - B.div) / 0.7)) return [COL.w, 0.9, false];
       if (fromR < V5.contra * sm((t - B.contra) / 0.9)) return [COL.no, 0.95, true];
       return [COL.dim, 0.22 * k, false];
     }
-    if (idx < V4.sim * sm((t - B.sim) / 1.6)) return [COL.y, 0.95, true];
+    if (idx < V4.sim * sm((t - B.sim) / 1.6)) return [COL.yes, 0.95, true];
     if (fromR < V4.nao * sm((t - B.nao) / 1.2)) return [COL.no, 0.95, true];
     if (B.rej !== undefined && t >= B.rej && idx >= V4.sim && idx < V4.quorum) return [COL.w, 0.45 + 0.5 * pulseAt(t, B.rej, 2.4, 2.2), false];
     return dim;

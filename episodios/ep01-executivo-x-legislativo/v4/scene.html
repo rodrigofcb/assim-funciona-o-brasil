@@ -14,13 +14,13 @@ window.THEME = {
   col:  { line: '176,186,198' },
   base: { fog: '255,255,255', fogA: 0, land: '176,186,198', water: '40,110,170', waterLine: '90,170,230', foot: '176,186,198',
           aMinor: .22, aMid: .42, aMajor: .70, aFoot: .30, aExtr: .45 },
-  col3d:{ sub: '236,240,244', no: '56,214,255', dim: '176,186,198' },
-  glow: { model: 0, lit: .5, pulse: 1.2, hl: .4, seat: .05 }
+  col3d:{ sub: '236,240,244', yes: '43,214,110', no: '229,50,45', dim: '176,186,198' },   // assentos: a favor verde, contra vermelho (mesmas cores dos ícones)
+  glow: { model: 0, lit: 0, pulse: 1.2, hl: 0, seat: .04 }                                // brilho só nos pulsos (ênfase); o contraste já destaca os prédios
 };
 </script>
 <script src="../../../vinheta/mapa3d.js"></script>
 <style>
-:root{--g:#2BD66E;--y:#FFDF00;--bl:#38D6FF;--bg:#060E24;--over:cubic-bezier(.22,1.3,.36,1);--ease:cubic-bezier(.2,.8,.2,1)}
+:root{--g:#2BD66E;--y:#FFDF00;--r:#E5322D;--bl:#38D6FF;--bg:#060E24;--over:cubic-bezier(.22,1.3,.36,1);--ease:cubic-bezier(.2,.8,.2,1)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Inter Display","Inter",system-ui,sans-serif;color:#fff}
 *,*::before,*::after{animation-play-state:paused !important}
@@ -71,6 +71,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 .item i{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--g);margin-right:22px;vertical-align:middle;box-shadow:0 0 18px rgba(43,214,110,.8)}
 .item i.y{background:var(--y);box-shadow:0 0 18px rgba(255,223,0,.8)}.item i.bl{background:var(--bl);box-shadow:0 0 18px rgba(56,214,255,.8)}
 .item i.o{background:transparent;border:3px solid #fff;box-shadow:none}.item i.d{background:rgba(176,186,198,.35);box-shadow:none}
+/* ícones de voto (sinais de trânsito): tick verde = a favor; círculo vermelho com barra = contra */
+.ico{display:inline-block;vertical-align:middle;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.item .ico{width:64px;height:64px;margin-right:18px;margin-top:-8px}
+.big .ico{width:112px;height:112px;margin-right:14px;margin-top:-16px}
+.ok{stroke:var(--g);stroke-width:9}.no{stroke:var(--r);stroke-width:8}
 .foot{position:absolute;left:84px;bottom:300px;width:912px;text-align:center;font-size:24px;color:rgba(255,255,255,.62);line-height:1.3}
 .src{position:absolute;left:84px;bottom:300px;width:912px;text-align:center;font-size:28px;font-weight:600;color:rgba(255,255,255,.85);line-height:1.3;text-shadow:0 4px 16px rgba(0,0,0,.8)}
 
@@ -81,6 +86,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 .big{font-size:130px;font-weight:900;letter-spacing:-.03em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.6)}
 .big small{font-size:52px;font-weight:800;letter-spacing:0;margin-left:14px;vertical-align:baseline}
 .cnt{position:absolute;left:84px;width:912px;display:flex;justify-content:space-between;align-items:flex-end}
+.cnt .big{font-size:110px;white-space:nowrap}.cnt .big .ico{width:92px;height:92px;margin-right:10px;margin-top:-12px}.cnt .big small{font-size:44px;margin-left:10px}
 .stamp{position:absolute;left:50%;top:1120px;transform:translate(-50%,-50%) rotate(-7deg);padding:18px 44px;border:8px solid #fff;border-radius:18px;font-size:112px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.7);
   box-shadow:0 0 0 6px rgba(6,14,36,.6), 0 20px 60px rgba(0,0,0,.6);background:rgba(6,14,36,.6);animation:stampIn .35s cubic-bezier(.2,1.5,.4,1) var(--in) both, tOut .45s var(--ease) var(--out) forwards}
 @keyframes stampIn{from{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(2.2)}to{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}}
@@ -168,11 +174,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
       <div class="s" style="margin-top:28px"><span class="w" data-in="caso">PLP 281/2019 · regras para bancos em crise<br>Câmara, 14 de outubro de 2026</span></div>
     </div>
     <div class="cnt" style="top:810px;--out:var(--b-s4out)">
-      <div class="big y w" data-in="sim" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><span class="num" data-in="sim" style="--to:252"></span><small>sim</small></div>
-      <div class="big bl w" data-in="nao" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><span class="num" data-in="nao" style="--to:176;--dur:1.2s"></span><small>não</small></div>
+      <div class="big w" data-in="sim" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><svg class="ico ok" viewBox="0 0 64 64"><path d="M13 34l14 14 25-30"/></svg><span class="num" data-in="sim" style="--to:252"></span><small>sim</small></div>
+      <div class="big w" data-in="nao" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><svg class="ico no" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M15 15l34 34"/></svg><span class="num" data-in="nao" style="--to:176;--dur:1.2s"></span><small>não</small></div>
     </div>
     <div class="stamp" data-in="rej" style="--out:var(--b-s4out)">Rejeitado</div>
-    <div class="t" style="top:1225px;text-align:center;--out:var(--b-s4out)"><div class="m"><span class="w" data-in="rej">faltaram <span class="y">5</span> votos</span></div></div>
+    <div class="t" style="top:1225px;text-align:center;--out:var(--b-s4out)"><div class="m"><span class="w" data-in="rej">faltaram <span class="g">5</span> votos</span></div></div>
     <div class="src" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards" data-in="caso" data-out="s4out">dados: Câmara dos Deputados · via Politicômetro (politicometro.org)</div>
 
     <!-- cena 5: então, quem manda? -->
@@ -181,9 +187,9 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
     </div>
     <div class="t" style="top:530px;--out:var(--b-resp)">
       <div class="s"><span class="w" data-in="votos">Em <b style="color:#fff">1.148</b> votações da Câmara desde 2023:</span></div>
-      <span class="item b" data-in="com"><i></i><span class="num g" data-in="com" style="--to:345"></span> <span class="g">votam com</span> o governo</span>
-      <span class="item b" data-in="div"><i class="o"></i><span class="num" data-in="div" style="--to:63;--dur:.7s"></span> dividem</span>
-      <span class="item b" data-in="contra"><i class="bl"></i><span class="num bl" data-in="contra" style="--to:86;--dur:.9s"></span> <span class="bl">votam contra</span></span>
+      <span class="item b" data-in="com"><svg class="ico ok" viewBox="0 0 64 64"><path d="M13 34l14 14 25-30"/></svg><span class="num" data-in="com" style="--to:345"></span> votam com o governo</span>
+      <span class="item b" data-in="div"><svg class="ico" viewBox="0 0 64 64" style="stroke:#fff;stroke-width:6"><circle cx="32" cy="32" r="24"/></svg><span class="num" data-in="div" style="--to:63;--dur:.7s"></span> dividem</span>
+      <span class="item b" data-in="contra"><svg class="ico no" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M15 15l34 34"/></svg><span class="num" data-in="contra" style="--to:86;--dur:.9s"></span> votam contra</span>
       <span class="item b" data-in="contra" style="font-size:34px;font-weight:600;color:rgba(255,255,255,.75);margin-top:18px"><i class="d" style="width:16px;height:16px;margin-left:3px;margin-right:25px"></i>19 sem classificação</span>
     </div>
     <div class="t" style="top:560px;--out:var(--b-s5out)"><div class="m" style="font-size:72px"><span class="w" data-in="resp">O presidente governa com a maioria que <span class="g">constrói</span> no <span class="y">Congresso</span>.</span></div></div>
