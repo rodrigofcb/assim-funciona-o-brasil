@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Ep1 v2 (texto na tela, cinematográfico)</title>
+<script src="timeline.js"></script>
+<style>
+:root{
+  --g:#2BD66E; --gd:#0F8A45; --y:#FFDF00; --yd:#C9A800; --navy:#08204F;
+  --over:cubic-bezier(.22,1.3,.36,1); --ease:cubic-bezier(.2,.8,.2,1); --io:cubic-bezier(.65,0,.35,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-family:"Inter Display","Inter",system-ui,sans-serif;color:#fff}
+*,*::before,*::after{animation-play-state:paused !important}
+.abs{position:absolute}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:#040B1E}
+
+/* ---------- cenário (câmera) ---------- */
+#cam{position:absolute;inset:0;transform-origin:540px 1000px;animation:cam 20.5s linear both}
+#sky{position:absolute;inset:-700px;background:
+  radial-gradient(70% 45% at 50% 22%, rgba(255,226,120,.16) 0%, rgba(255,226,120,0) 60%),
+  radial-gradient(110% 70% at 50% 30%, #143A7E 0%, #0A2256 38%, #050F2C 72%, #030818 100%)}
+#rays{position:absolute;left:-400px;top:-1300px;width:1880px;height:1880px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,230,140,0) 0deg 7deg, rgba(255,230,140,.05) 7deg 9.5deg, rgba(255,230,140,0) 9.5deg 14deg);
+  -webkit-mask-image:radial-gradient(closest-side, #000 30%, transparent 100%);mask-image:radial-gradient(closest-side, #000 30%, transparent 100%);
+  animation:rays 20.5s linear both;opacity:.9}
+@keyframes rays{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+#haze{position:absolute;left:-700px;top:900px;width:2480px;height:420px;background:linear-gradient(to bottom, rgba(90,140,230,0) 0%, rgba(90,140,230,.16) 45%, rgba(90,140,230,0) 100%)}
+#world{position:absolute;inset:0;perspective:1100px;perspective-origin:50% 38%}
+#floor{position:absolute;left:-2460px;top:1030px;width:6000px;height:3000px;transform-origin:50% 0;transform:rotateX(74deg);
+  background:
+   repeating-linear-gradient(90deg, rgba(120,170,255,.13) 0 3px, transparent 3px 150px),
+   repeating-linear-gradient(0deg, rgba(120,170,255,.13) 0 3px, transparent 3px 150px),
+   radial-gradient(60% 40% at 50% 0%, rgba(60,110,210,.35), rgba(10,30,80,0) 70%);
+  -webkit-mask-image:radial-gradient(55% 60% at 50% 0%, #000 10%, rgba(0,0,0,.5) 40%, transparent 72%);mask-image:radial-gradient(55% 60% at 50% 0%, #000 10%, rgba(0,0,0,.5) 40%, transparent 72%)}
+#floorglow{position:absolute;left:-700px;top:1000px;width:2480px;height:300px;background:linear-gradient(to bottom, rgba(120,170,255,.22), rgba(120,170,255,0))}
+
+.bld{position:absolute;width:440px;height:330px;bottom:760px}
+.bld svg{position:absolute;left:0;bottom:0;width:440px;height:auto;filter:drop-shadow(0 30px 40px rgba(0,0,0,.6))}
+.bld .glow{position:absolute;left:-45%;top:-55%;width:190%;height:200%;border-radius:50%;opacity:0;animation:lit 1.2s var(--ease) var(--lit) both}
+.bld .refl{position:absolute;left:0;top:100%;width:440px;height:330px;opacity:.26;transform:scaleY(-1);transform-origin:50% 50%;filter:blur(3px);
+  -webkit-mask-image:linear-gradient(to top, rgba(0,0,0,.9), transparent 62%);mask-image:linear-gradient(to top, rgba(0,0,0,.9), transparent 62%)}
+.bld .refl svg{filter:none}
+@keyframes lit{from{opacity:0}to{opacity:1}}
+@keyframes undim{from{opacity:1}to{opacity:0}}
+#planalto{left:50px}#planalto .glow{background:radial-gradient(closest-side, rgba(43,214,110,.55), rgba(43,214,110,.12) 45%, rgba(43,214,110,0) 72%)}
+#congresso{left:590px}#congresso .glow{background:radial-gradient(closest-side, rgba(255,223,0,.5), rgba(255,223,0,.1) 45%, rgba(255,223,0,0) 72%)}
+#planalto svg path,#planalto svg rect,#planalto svg polygon{fill:url(#gg)}
+#congresso svg path,#congresso svg rect{fill:url(#yg)}
+
+/* holofote do "fiscaliza" */
+#beam{position:absolute;left:0;top:0;width:620px;height:260px;transform-origin:100% 50%;left:270px;top:790px;opacity:0;
+  background:linear-gradient(to left, rgba(255,223,0,.6), rgba(255,223,0,.12) 60%, rgba(255,223,0,0));
+  clip-path:polygon(100% 44%, 100% 56%, 0 100%, 0 0);filter:blur(6px);
+  animation:beam 2.2s var(--io) var(--beam) both}
+@keyframes beam{0%{opacity:0;transform:rotate(-28deg)}18%{opacity:.95;transform:rotate(-20deg)}70%{opacity:.95;transform:rotate(6deg)}100%{opacity:0;transform:rotate(10deg)}}
+#spot{position:absolute;left:30px;top:720px;width:480px;height:420px;border-radius:50%;background:radial-gradient(closest-side, rgba(255,240,150,.45), rgba(255,240,150,0) 70%);opacity:0;animation:spot 2.2s var(--io) var(--beam) both}
+@keyframes spot{0%{opacity:0}40%{opacity:0}62%{opacity:1}100%{opacity:0}}
+
+#dust{position:absolute;inset:0;overflow:hidden}
+.p{position:absolute;border-radius:50%;background:radial-gradient(closest-side, rgba(255,240,200,.9), rgba(255,240,200,0));animation:drift linear infinite}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:var(--o)}85%{opacity:var(--o)}100%{transform:translate(var(--dx),var(--dy));opacity:0}}
+
+/* ---------- texto (fora da câmera) ---------- */
+#ui{position:absolute;inset:0}
+.t{position:absolute;left:84px;width:912px;animation:tOut .45s var(--ease) var(--out) forwards}
+@keyframes tOut{from{opacity:1;transform:none;filter:blur(0)}to{opacity:0;transform:translateY(-26px);filter:blur(6px)}}
+.w{display:inline-block;animation:wIn .6s var(--over) var(--in) both}
+.b{display:block;animation:wIn .6s var(--over) var(--in) both}
+@keyframes wIn{from{opacity:0;transform:translateY(34px) scale(.96);filter:blur(12px)}to{opacity:1;transform:none;filter:blur(0)}}
+.h{font-size:124px;font-weight:900;letter-spacing:-.035em;line-height:.96;text-transform:uppercase;text-shadow:0 10px 40px rgba(0,0,0,.5)}
+.h2{font-size:96px;font-weight:900;letter-spacing:-.03em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.5)}
+.m{font-size:66px;font-weight:800;letter-spacing:-.02em;line-height:1.1;text-shadow:0 8px 30px rgba(0,0,0,.5)}
+.s{font-size:44px;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.74);line-height:1.25}
+.g{color:var(--g)}.y{color:var(--y)}.dimw{color:rgba(255,255,255,.55)}
+.lbl{position:absolute;font-size:58px;font-weight:800;letter-spacing:-.02em;text-shadow:0 8px 30px rgba(0,0,0,.6)}
+.row{position:relative;display:block;font-size:60px;font-weight:800;letter-spacing:-.02em;line-height:1;padding:0 0 22px 0;margin-top:30px;width:560px}
+.row .bar{position:absolute;left:0;bottom:0;height:10px;width:100%;border-radius:5px;background:rgba(255,255,255,.1)}
+.row .bar i{position:absolute;left:0;top:0;height:100%;width:100%;border-radius:5px;background:linear-gradient(90deg, var(--gd), var(--g));transform-origin:left;animation:fillb .6s steps(6,end) calc(var(--in) + .15s) both}
+@keyframes fillb{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.foot{position:absolute;left:84px;bottom:390px;width:912px;text-align:center;font-size:26px;color:rgba(255,255,255,.4);line-height:1.3}
+
+/* ---------- acabamento ---------- */
+#grain{position:absolute;inset:-10%;opacity:.11;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  animation:grain .6s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-40px,30px)}40%{transform:translate(30px,-50px)}60%{transform:translate(-60px,-20px)}80%{transform:translate(50px,40px)}100%{transform:translate(0,0)}}
+#vig{position:absolute;inset:0;background:radial-gradient(115% 85% at 50% 45%, rgba(0,0,0,0) 50%, rgba(0,0,0,.62) 100%)}
+#fadeout{position:absolute;inset:0;background:#040B1E;opacity:0;animation:fo .9s var(--ease) 19.6s both}
+@keyframes fo{to{opacity:1}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5EF09A"/><stop offset=".55" stop-color="#1FB45C"/><stop offset="1" stop-color="#0B6B34"/></linearGradient>
+  <linearGradient id="yg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF2A0"/><stop offset=".5" stop-color="#FFDF00"/><stop offset="1" stop-color="#B89900"/></linearGradient>
+</defs></svg>
+<div id="stage">
+  <div id="cam">
+    <div id="sky"></div><div id="rays"></div>
+    <div id="world"><div id="floor"></div></div>
+    <div id="floorglow"></div><div id="haze"></div>
+    <div id="spot"></div>
+    <div class="bld" id="planalto" style="--lit:var(--b-pres)">
+      <div class="glow"></div>
+      <svg viewBox="0 0 200 140"><rect x="8" y="22" width="184" height="13" rx="3"/>
+        <path d="M48 35 C 30 60 30 95 48 120 L 56 120 C 40 95 40 60 56 35 Z"/><path d="M88 35 C 70 60 70 95 88 120 L 96 120 C 80 95 80 60 96 35 Z"/>
+        <path d="M128 35 C 110 60 110 95 128 120 L 136 120 C 120 95 120 60 136 35 Z"/><path d="M168 35 C 150 60 150 95 168 120 L 176 120 C 160 95 160 60 176 35 Z"/>
+        <rect x="0" y="120" width="200" height="12" rx="3"/><polygon points="0,118 86,118 0,88"/></svg>
+      <div class="refl"><svg viewBox="0 0 200 140"><rect x="8" y="22" width="184" height="13" rx="3"/>
+        <path d="M48 35 C 30 60 30 95 48 120 L 56 120 C 40 95 40 60 56 35 Z"/><path d="M88 35 C 70 60 70 95 88 120 L 96 120 C 80 95 80 60 96 35 Z"/>
+        <path d="M128 35 C 110 60 110 95 128 120 L 136 120 C 120 95 120 60 136 35 Z"/><path d="M168 35 C 150 60 150 95 168 120 L 176 120 C 160 95 160 60 176 35 Z"/>
+        <rect x="0" y="120" width="200" height="12" rx="3"/><polygon points="0,118 86,118 0,88"/></svg></div>
+    </div>
+    <div class="bld" id="congresso" style="--lit:var(--b-cong)">
+      <div class="glow"></div>
+      <svg viewBox="0 0 210 150"><rect x="0" y="122" width="210" height="12" rx="3"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/>
+        <rect x="98" y="6" width="12" height="116" rx="2"/><rect x="116" y="6" width="12" height="116" rx="2"/><rect x="106" y="58" width="14" height="8"/>
+        <path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg>
+      <div class="refl"><svg viewBox="0 0 210 150"><rect x="0" y="122" width="210" height="12" rx="3"/><path d="M12 82 A40 40 0 0 0 92 82 Z"/>
+        <rect x="98" y="6" width="12" height="116" rx="2"/><rect x="116" y="6" width="12" height="116" rx="2"/><rect x="106" y="58" width="14" height="8"/>
+        <path d="M122 122 A40 40 0 0 1 202 122 Z"/></svg></div>
+    </div>
+    <div id="beam"></div>
+    <div id="dust"></div>
+  </div>
+
+  <div id="ui">
+    <!-- cena 1 -->
+    <div class="t" style="top:210px;--out:var(--b-s1out)">
+      <div class="h"><span class="w" data-in="quem">Quem</span> <span class="w" data-in="manda">manda</span><br><span class="w y" data-in="brasil">no Brasil?</span></div>
+    </div>
+    <div class="t lbl g" style="left:0;width:540px;text-align:center;top:1210px;--out:var(--b-s1out)"><span class="w" data-in="pres">o presidente</span></div>
+    <div class="t lbl" style="left:470px;width:140px;text-align:center;top:1210px;--out:var(--b-s1out);color:rgba(255,255,255,.6)"><span class="w" data-in="ou">ou</span></div>
+    <div class="t lbl y" style="left:560px;width:520px;text-align:center;top:1210px;--out:var(--b-s1out)"><span class="w" data-in="cong">o Congresso?</span></div>
+
+    <!-- cena 2a -->
+    <div class="t" style="top:230px;--out:var(--b-s2aout)">
+      <div class="h"><span class="w" data-in="osdois">Os dois.</span></div>
+      <div class="m" style="margin-top:34px"><span class="w" data-in="mas">Mas em <span class="y">coisas diferentes</span>.</span></div>
+    </div>
+
+    <!-- cena 2b: Executivo -->
+    <div class="t" style="top:200px;--out:var(--b-s2bout)">
+      <div class="h2 g"><span class="w" data-in="exec">Executivo</span></div>
+      <div class="s" style="margin-top:16px"><span class="w" data-in="execsub">presidente · governador · prefeito</span></div>
+      <div class="m" style="margin-top:56px"><span class="w" data-in="adm">administra</span></div>
+      <span class="row b" data-in="din">dinheiro<span class="bar"><i></i></span></span>
+      <span class="row b" data-in="obr">obras<span class="bar"><i></i></span></span>
+      <span class="row b" data-in="ser">serviços<span class="bar"><i></i></span></span>
+    </div>
+
+    <!-- cena 2c: Legislativo -->
+    <div class="t" style="top:200px;--out:var(--b-s2cout)">
+      <div class="h2 y"><span class="w" data-in="legis">Legislativo</span></div>
+      <div class="s" style="margin-top:16px"><span class="w" data-in="legsub">Congresso · assembleias · câmaras de vereadores</span></div>
+      <div class="m" style="margin-top:56px"><span class="b" data-in="cria">cria as <span class="y">regras</span></span><span class="b" data-in="fisc" style="margin-top:18px">e <span class="y">fiscaliza</span> quem administra</span></div>
+    </div>
+
+    <div class="foot">Assim Funciona o Brasil · ep. 1</div>
+  </div>
+
+  <div id="grain"></div><div id="vig"></div><div id="fadeout"></div>
+</div>
+<script>
+(function(){
+  const R=document.documentElement.style;
+  for(const k in TL.beats) R.setProperty('--b-'+k, TL.beats[k]+'s');
+  R.setProperty('--beam', TL.beats.beam+'s');
+  document.querySelectorAll('[data-in]').forEach(e=>e.style.setProperty('--in', TL.beats[e.dataset.in]+'s'));
+  // câmera: keyframes gerados da linha do tempo (easing in-out entre pontos)
+  const end=TL.end, kf=TL.cam.map(([t,x,y,s],i)=>`${(100*t/end).toFixed(3)}%{transform:scale(${s}) translate(${x}px,${y}px);animation-timing-function:cubic-bezier(.65,0,.35,1)}`).join('');
+  const st=document.createElement('style'); st.textContent=`@keyframes cam{${kf}}`; document.head.appendChild(st);
+  // poeira: partículas com paralaxe (semente fixa)
+  let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const dust=document.getElementById('dust');
+  for(let i=0;i<34;i++){const p=document.createElement('div');p.className='p';const z=rnd();const sz=4+z*14;
+    p.style.cssText=`left:${(rnd()*1080).toFixed(0)}px;top:${(500+rnd()*900).toFixed(0)}px;width:${sz}px;height:${sz}px;filter:blur(${(1-z)*2.5}px);--o:${(.25+z*.55).toFixed(2)};--dx:${((rnd()-.5)*160).toFixed(0)}px;--dy:${(-60-rnd()*160).toFixed(0)}px;animation-duration:${(7+rnd()*9).toFixed(1)}s;animation-delay:-${(rnd()*12).toFixed(1)}s`;
+    dust.appendChild(p);}
+})();
+window.TOTAL=TL.end;
+window.seek=function(ms){document.getAnimations().forEach(a=>{a.currentTime=ms;});return document.getAnimations().length;};
+</script>
+</body>
+</html>
