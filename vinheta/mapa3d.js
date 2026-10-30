@@ -4,7 +4,11 @@ window.Mapa3D = (() => {
   const W = 1080, H = 1920; const deg = Math.PI / 180;
   const sm = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
   const lerp = (a, b, k) => a + (b - a) * k;
-  const COL = { line: '184,228,255', g: '43,214,110', y: '255,223,0', br: '255,236,120' };
+  // tema opcional (window.THEME definido antes deste script): cores das camadas de base; padrão = blueprint
+  const T = window.THEME || {};
+  const COL = Object.assign({ line: '184,228,255', g: '43,214,110', y: '255,223,0', br: '255,236,120' }, T.col || {});
+  const LAY = Object.assign({ fog: '70,120,220', fogA: 0.20, land: '120,180,255', water: '80,150,255', waterLine: '120,190,255', foot: '120,180,255',
+    aMinor: 0.16, aMid: 0.32, aMajor: 0.55, aFoot: 0.22, aExtr: 0.35 }, T.base || {});
   let ctx, cv;
 
   // ---- câmera: [t, tx, ty, h, pitch(graus, 0=zenital), rumo(graus: de onde a câmera olha; 270 = norte para cima)]
@@ -76,12 +80,12 @@ window.Mapa3D = (() => {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
     // névoa radial no alvo
     const tq = P(c, c.target) || [W / 2, H / 2]; const g = ctx.createRadialGradient(tq[0], tq[1], 0, tq[0], tq[1], 1300);
-    g.addColorStop(0, 'rgba(70,120,220,0.20)'); g.addColorStop(1, 'rgba(70,120,220,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    g.addColorStop(0, `rgba(${LAY.fog},${LAY.fogA})`); g.addColorStop(1, `rgba(${LAY.fog},0)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     // país (some abaixo de ~40 km; o DF permanece até ~8 km)
     const aPais = 1 - fadeIn(h, 60000, 25000);
     if (aPais > 0) {
       stroke(c, BR.viz, 1.2, 0.16 * aPais);
-      fill(c, BR.br, 0.07 * aPais, '120,180,255'); stroke(c, ufRings, 1.1, 0.30 * aPais);
+      fill(c, BR.br, 0.07 * aPais, LAY.land); stroke(c, ufRings, 1.1, 0.30 * aPais);
       stroke(c, BR.br, 2.4, 0.95 * aPais, COL.br);
       // capitais
       const aCap = aPais * (1 - fadeIn(h, 2500000, 700000));
@@ -98,7 +102,7 @@ window.Mapa3D = (() => {
     // cidade (avião): vias principais da região, do nível ~150 km até o detalhe
     const aCid = fadeIn(h, 450000, 60000);
     if (aCid > 0 && AV) {
-      fill(c, AV.water, 0.18 * aCid, '80,150,255'); stroke(c, AV.water, px(6), 0.35 * aCid, '120,190,255', true);
+      fill(c, AV.water, 0.18 * aCid, LAY.water); stroke(c, AV.water, px(6), 0.35 * aCid, LAY.waterLine, true);
       stroke(c, AV.roads.sec, px(14), 0.22 * aCid); stroke(c, AV.roads.pri, px(26), 0.55 * aCid);
       stroke(c, AV.roads.eixo, px(140), 0.18 * aCid, COL.br); stroke(c, AV.roads.eixo, px(40), 0.95 * aCid, COL.br);
     }
@@ -106,16 +110,16 @@ window.Mapa3D = (() => {
     const aLoc = fadeIn(h, 20000, 4000);
     if (aLoc > 0 && M) {
       const lim2 = (2.4 * c.dist + 500) ** 2;
-      fill(c, M.water, 0.10 * aLoc, '80,150,255', lim2);
-      if (batch(c, foot, 0, true, lim2)) { ctx.fillStyle = `rgba(120,180,255,${0.07 * aLoc})`; ctx.fill(); ctx.lineWidth = px(1.2); ctx.strokeStyle = `rgba(${COL.line},${0.22 * aLoc})`; ctx.stroke(); }
-      stroke(c, M.roads.minor, px(1.0), 0.16 * aLoc, COL.line, false, lim2);
-      stroke(c, M.roads.mid, px(2.2), 0.32 * aLoc, COL.line, false, lim2);
-      stroke(c, M.roads.major, px(4.5), 0.55 * aLoc * (AV ? 1 - 0.5 * aCid * (1 - aLoc) : 1), COL.line, false, lim2);
+      fill(c, M.water, 0.10 * aLoc, LAY.water, lim2);
+      if (batch(c, foot, 0, true, lim2)) { ctx.fillStyle = `rgba(${LAY.foot},${0.07 * aLoc})`; ctx.fill(); ctx.lineWidth = px(1.2); ctx.strokeStyle = `rgba(${COL.line},${LAY.aFoot * aLoc})`; ctx.stroke(); }
+      stroke(c, M.roads.minor, px(1.0), LAY.aMinor * aLoc, COL.line, false, lim2);
+      stroke(c, M.roads.mid, px(2.2), LAY.aMid * aLoc, COL.line, false, lim2);
+      stroke(c, M.roads.major, px(4.5), LAY.aMajor * aLoc * (AV ? 1 - 0.5 * aCid * (1 - aLoc) : 1), COL.line, false, lim2);
       const aEx = fadeIn(h, 9000, 3000);
       if (aEx > 0) { ctx.beginPath(); let any = false;
         for (const e of extr) { const d = Math.hypot(e.c[0] - c.pos[0], e.c[1] - c.pos[1]); if (d > 2.2 * c.dist + 400) continue; const q = P(c, [e.c[0], e.c[1], 0]); if (!onScreen(q)) continue; any = true;
           for (const pl of e.lines) { let pen = false; for (const p of pl) { const qq = P(c, p); if (!qq) { pen = false; continue; } if (!pen) { ctx.moveTo(qq[0], qq[1]); pen = true; } else ctx.lineTo(qq[0], qq[1]); } } }
-        if (any) { ctx.lineWidth = px(1.4); ctx.strokeStyle = `rgba(${COL.line},${0.35 * aEx})`; ctx.stroke(); } }
+        if (any) { ctx.lineWidth = px(1.4); ctx.strokeStyle = `rgba(${COL.line},${LAY.aExtr * aEx})`; ctx.stroke(); } }
     }
     return { px, aLoc };
   }
