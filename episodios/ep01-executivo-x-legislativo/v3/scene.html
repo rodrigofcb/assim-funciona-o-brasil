@@ -28,13 +28,11 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 .tag{position:absolute;left:84px;width:912px;text-align:center;font-size:40px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 6px 24px rgba(0,0,0,.8)}
 .tag .w{animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards}
 
-/* parede de azulejos (transição "Os dois") */
-#wall{position:absolute;inset:0;display:grid;grid-template-columns:repeat(9,120px);grid-auto-rows:120px;perspective:1600px}
-.tl{width:120px;height:120px;background:#F2EFE6;transform-origin:50% 50%;backface-visibility:hidden;box-shadow:inset 0 0 0 1px rgba(11,42,111,.08);
-  animation:tin .5s var(--over) var(--din) both, tout .4s var(--ease) var(--dout) forwards}
-.tl svg{width:120px;height:120px;display:block}
-@keyframes tin{from{opacity:0;transform:rotateY(80deg) scale(.9)}to{opacity:1;transform:none}}
-@keyframes tout{from{opacity:1;transform:none}to{opacity:0;transform:rotateY(-80deg) scale(.9)}}
+/* composição geométrica modular (transição "Os dois"): módulos grandes, sem rejunte, ordem sorteada */
+#geo{position:absolute;inset:0;width:1080px;height:1920px}
+#geo .blk{transform-box:fill-box;animation:gIn .55s var(--over) var(--din) both, gOut .45s var(--ease) var(--dout) forwards}
+@keyframes gIn{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes gOut{from{transform:scale(1)}to{transform:scale(0)}}
 .navy{color:#0B2A6F !important;text-shadow:none !important}
 .navy .y{color:#1E4FA6;background:#F5C800;padding:0 14px;border-radius:12px}
 #grain2{position:absolute;inset:-10%;opacity:.09;mix-blend-mode:multiply;pointer-events:none;animation:grain .6s steps(6) infinite, gin .3s linear var(--b-wall) both, gout .3s linear var(--b-wallout) forwards;
@@ -84,7 +82,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 
   <div class="tag abs" style="top:1500px"><span class="w" data-in="bsb" style="--out:3.3s">Brasília</span></div>
   <div class="tag abs" style="top:1500px"><span class="w" data-in="aviao" style="--out:5.0s">Plano Piloto</span></div>
-  <div id="wall"></div><div id="grain2"></div>
+  <svg id="geo" viewBox="0 0 1080 1920"></svg><div id="grain2"></div>
   <div id="pins">
     <div class="pin" data-key="fazenda"><div data-in="din"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="22"/><path d="M26 40c0 3 3 5 6 5s6-2 6-5-3-4-6-5-6-2-6-5 3-5 6-5 6 2 6 5M32 17v4M32 43v4"/></svg></div><div class="nm">Fazenda</div><div class="stem"></div></div></div>
     <div class="pin" data-key="transportes"><div data-in="obr"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 54h44M14 54V22l20-10v42M34 22h16v32M22 24v4M22 34v4M22 44v4M42 30v4M42 40v4"/></svg></div><div class="nm">Transportes</div><div class="stem"></div></div></div>
@@ -141,15 +139,32 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
   for(let i=0;i<30;i++){const p=document.createElement('div');p.className='p';const z=rnd();const sz=4+z*14;
     p.style.cssText=`left:${(rnd()*1080).toFixed(0)}px;top:${(400+rnd()*1100).toFixed(0)}px;width:${sz}px;height:${sz}px;filter:blur(${(1-z)*2.5}px);--o:${(.2+z*.5).toFixed(2)};--dx:${((rnd()-.5)*160).toFixed(0)}px;--dy:${(-60-rnd()*160).toFixed(0)}px;animation-duration:${(7+rnd()*9).toFixed(1)}s;animation-delay:-${(rnd()*12).toFixed(1)}s`;
     dust.appendChild(p);}
-  // parede de azulejos: módulos originais em "desordem controlada", faixa vazia (linhas 6-9) para o texto
-  const mod={tri:c=>`<polygon points="0,0 120,0 0,120" fill="${c}"/>`,quad:c=>`<path d="M0 0 H120 A120 120 0 0 1 0 120 Z" fill="${c}"/>`,bar:c=>`<rect x="0" y="0" width="48" height="120" fill="${c}"/>`,
-    dois:c=>`<polygon points="0,0 60,0 0,60" fill="${c}"/><polygon points="120,120 60,120 120,60" fill="${c}"/>`,arco:c=>`<path d="M0 120 A120 120 0 0 1 120 0 L120 36 A84 84 0 0 0 36 120 Z" fill="${c}"/>`,none:()=>``};
-  const keys=['tri','quad','bar','dois','arco','none','tri','quad']; let ws=2026; const wr=()=>{ws=(ws*16807)%2147483647;return ws/2147483647;};
-  const wall=document.getElementById('wall'); const B=TL.beats;
-  for(let r=0;r<16;r++) for(let c=0;c<9;c++){const d=document.createElement('div');d.className='tl';
-    const k=(r>=6&&r<=9)?'none':keys[Math.floor(wr()*keys.length)]; const u=wr(); const col=u<0.07?'#F5C800':(u<0.12?'#1C9A4A':'#1E4FA6');
-    d.innerHTML=`<svg viewBox="0 0 120 120" style="transform:rotate(${Math.floor(wr()*4)*90}deg)">${mod[k](col)}</svg>`;
-    const wave=(r*0.9+c*0.5)*0.055; d.style.setProperty('--din',(B.wall+wave).toFixed(3)+'s'); d.style.setProperty('--dout',(B.wallout+wave*0.7).toFixed(3)+'s'); wall.appendChild(d);}
+  // composição geométrica: grade 3x5 com blocos mesclados (1x1, 2x1, 2x2), faixa central lisa para o texto.
+  // Lógica: poucos módulos, poucas cores, arranjo e ordem de entrada sorteados com semente fixa.
+  const NS='http://www.w3.org/2000/svg', geo=document.getElementById('geo'), B=TL.beats;
+  let gs=7919; const gr=()=>{gs=(gs*16807)%2147483647;return gs/2147483647;};
+  const CW=360, CH=384, COLS=3, ROWS=5; const used=Array.from({length:ROWS},()=>Array(COLS).fill(false)); const blocks=[];
+  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ if(used[r][c]) continue;
+    let w=1,hh=1; if(r!==2 && r+1<ROWS && r+1!==2 && c+1<COLS && !used[r][c+1] && !used[r+1][c] && !used[r+1][c+1] && gr()<0.35){w=2;hh=2;}
+    else if(c+1<COLS && !used[r][c+1] && gr()<0.3){w=2;}
+    for(let dr=0;dr<hh;dr++) for(let dc=0;dc<w;dc++) used[r+dr][c+dc]=true;
+    blocks.push({x:c*CW,y:r*CH,w:w*CW,h:hh*CH,plain:r===2});}
+  const shapes=[
+    (w,h,col)=>`<path d="M0 0 H${w} A${w} ${h} 0 0 1 0 ${h} Z" fill="${col}"/>`,
+    (w,h,col)=>`<polygon points="0,0 ${w},0 0,${h}" fill="${col}"/>`,
+    (w,h,col)=>`<path d="M0 ${h} A${w/2} ${h*0.9} 0 0 1 ${w} ${h} Z" fill="${col}"/>`,
+    (w,h,col)=>`<rect x="0" y="0" width="${w*0.42}" height="${h}" fill="${col}"/>`,
+    (w,h,col)=>`<path d="M0 ${h} A${w} ${h} 0 0 1 ${w} 0 L${w} ${h*0.32} A${w*0.68} ${h*0.68} 0 0 0 ${w*0.32} ${h} Z" fill="${col}"/>`,
+  ];
+  const order=blocks.map((_,i)=>i).sort(()=>gr()-0.5);
+  blocks.forEach((b,i)=>{
+    const g=document.createElementNS(NS,'g'); g.setAttribute('class','blk');
+    const corner=[['0%','0%'],['100%','0%'],['0%','100%'],['100%','100%']][Math.floor(gr()*4)]; g.style.transformOrigin=corner.join(' ');
+    const u=gr(); const col=u<0.08?'#F5C800':(u<0.14?'#1C9A4A':'#1E4FA6'); const sx=gr()<0.5?1:-1, sy=gr()<0.5?1:-1;
+    const inner=b.plain?'':`<g transform="translate(${b.w/2} ${b.h/2}) scale(${sx} ${sy}) translate(${-b.w/2} ${-b.h/2})">${shapes[Math.floor(gr()*shapes.length)](b.w,b.h,col)}</g>`;
+    g.innerHTML=`<g transform="translate(${b.x} ${b.y})"><rect width="${b.w}" height="${b.h}" fill="#F2EFE6"/>${inner}</g>`;
+    const k=order.indexOf(i); g.style.setProperty('--din',(B.wall+k*0.065).toFixed(3)+'s'); g.style.setProperty('--dout',(B.wallout+(order.length-1-k)*0.04).toFixed(3)+'s');
+    geo.appendChild(g);});
 })();
 window.TOTAL=TL.end;
 window.seek=function(ms){draw3d(ms/1000);document.getAnimations().forEach(a=>{a.currentTime=ms;});return document.getAnimations().length;};

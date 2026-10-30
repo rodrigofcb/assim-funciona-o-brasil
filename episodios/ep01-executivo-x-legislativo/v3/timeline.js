@@ -39,7 +39,7 @@ window.TL = {
  "sfx": [
    ["quem", "tick"], ["manda", "tick"], ["brasil", "impact"], ["bsb", "thrum"], ["aviao", "pop"], ["praca", "impact"],
    ["pres", "thrum"], ["buildP", "fill"], ["ou", "tick"], ["cong", "thrum"], ["buildC", "fill"], ["s1out", "whoosh"],
-   ["wall", "fill", {"ticks": 14, "dt": 0.07}], ["osdois", "impact"], ["mas", "tick"], ["wallout", "whoosh"],
+   ["wall", "fill", {"ticks": 9, "dt": 0.065}], ["osdois", "impact"], ["mas", "tick"], ["wallout", "whoosh"],
    ["exec", "pop"], ["execsub", "tick"], ["adm", "tick"], ["din", "fill"], ["obr", "fill"], ["ser", "fill"],
    ["s2bout", "whoosh"], ["legis", "pop"], ["legsub", "tick"], ["cria", "tick"], ["fisc", "tick"], ["beam", "sweep"], ["s2cout", "whoosh"]
  ],
