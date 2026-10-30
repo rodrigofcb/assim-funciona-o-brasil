@@ -37,12 +37,14 @@ Maiores mudanças na posse de 2027: PL passa de 98 para 121 deputados e de 15 pa
 - 345 deputados votam igual ao governo em mais de 2 de cada 3 votações ("com o governo")
 - 63 dividem
 - 86 votam igual ao governo em menos de 1 de cada 3 ("contra o governo")
+- os três grupos somam 494; os 19 restantes dos 513 não entram na classificação do site (no vídeo: "19 sem classificação")
 (contas do Politicômetro sobre dados abertos da Câmara)
 
 ## Atividade do Plenário
 - 1.458 votações no Plenário da Câmara e do Senado em 2026 (até 30/10).
 - Exemplos recentes com placar: PLP 186/2026 (MEI) 461 × 4 na Câmara e 78 × 0 no Senado; PEC 221/2019 (jornada semanal, 2º turno no Senado) 75 × 1;
   PLP 281/2019 rejeitado na Câmara com 252 sim × 176 não porque precisava de 257 (maioria absoluta): bom exemplo de "ter mais sim que não não basta".
+  Conferido fora do site: votação de 14/10/2026, projeto do regime de resolução de bancos em crise (relator Marcelo Queiroz), "eram necessários pelo menos 257 votos favoráveis" (contabeis.com.br, 15/10/2026).
 - Hiatos sem votação que muda lei: 39 dias (04/09 a 12/10) e 11 dias (16/10 a 26/10) em 2026.
 
 ## Eleição presidencial 2026 (2º turno, 25/10/2026, TSE)

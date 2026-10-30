@@ -1,6 +1,6 @@
 window.TL = {
- "fps": 30, "end": 25.5,
- "scenes": [["s1", 0, 10.4], ["s2", 10.4, 25.5]],
+ "fps": 30, "end": 63.5,
+ "scenes": [["s1", 0, 10.4], ["s2", 10.4, 25.5], ["s3", 25.5, 36.9], ["s4", 36.9, 48.6], ["s5", 48.6, 58.8], ["s6", 58.8, 63.5]],
  "handoff": 5.2,
  "zoom": [
   [0.0,  -560000, 560000,  7200000, 0, 270],
@@ -25,23 +25,42 @@ window.TL = {
   [18.9,  -400, -340, 120,     20, 10, 60,   50, null],
   [20.6,  -430, -300, 135,     20, 10, 60,   50, null],
   [21.7,  -100, -1500, 900,  -380, 100, 30,  50, null],
-  [25.5,  -160, -1560, 940,  -380, 100, 30,  50, null]
+  [25.5,  -160, -1560, 940,  -380, 100, 30,  50, null],
+  [26.7,  -434, -467, 318,    170, 40, 0,    50, null],
+  [36.0,  -400, -505, 330,    170, 40, 0,    50, null],
+  [37.4, -1169,  386, 500,   -599, 202, 0,   50, null],
+  [48.0, -1150,  362, 495,   -599, 202, 0,   50, null],
+  [48.9, -1195,  400, 520,   -605, 204, 0,   50, null],
+  [58.3, -1180,  380, 515,   -605, 204, 0,   50, null],
+  [62.0, -3200, 1000, 24000, -3200, 1000, 0, 50, [0, 1, 0]],
+  [63.5, -3200, 1000, 25500, -3200, 1000, 0, 50, [0, 1, 0]]
  ],
  "beats": {
    "quem": 0.35, "manda": 0.6, "brasil": 0.95, "bsb": 2.6, "aviao": 3.4, "praca": 5.2,
    "pres": 6.4, "buildP": 6.2, "ou": 7.6, "cong": 7.9, "buildC": 7.7, "s1out": 9.9,
-   "wall": 9.5, "osdois": 10.5, "mas": 11.4, "s2aout": 12.2, "wallout": 12.3,
+   "osdois": 10.5, "mas": 11.4, "s2aout": 12.2,
    "exec": 13.2, "execsub": 13.7, "adm": 14.4, "din": 14.9, "obr": 15.8, "ser": 16.7, "s2bout": 17.9,
-   "legis": 18.7, "legsub": 19.2, "cria": 20.0, "fisc": 20.9, "beam": 21.1, "s2cout": 24.1
+   "legis": 18.7, "legsub": 19.2, "cria": 20.0, "fisc": 20.9, "beam": 21.1, "s2cout": 24.1,
+   "s3t": 26.1, "aprova": 27.2, "viaja1": 27.9, "sanc": 29.2, "veta": 30.5, "viaja2": 31.3, "derruba": 32.6, "n257": 33.5, "n41": 34.2, "s3out": 36.3,
+   "s4t": 37.6, "seats": 38.0, "n513": 38.3, "caso": 39.3, "sim": 40.3, "nao": 42.3, "lim": 43.9, "rej": 45.2, "s4out": 48.0,
+   "reset": 48.3, "s5t": 48.9, "votos": 49.9, "com": 51.0, "div": 53.0, "contra": 54.3, "resp": 56.0, "s5out": 58.3,
+   "marca": 59.6, "prox": 60.8, "cred": 61.2, "fade": 62.7
  },
  "build": { "planalto": [6.2, 7.1], "congresso": [7.7, 8.8], "stf": [9.0, 9.8] },
  "hl": { "fazenda": "din", "transportes": "obr", "saude": "ser", "educacao": "ser" },
+ "travel": 1.1,
  "sfx": [
    ["quem", "tick"], ["manda", "tick"], ["brasil", "impact"], ["bsb", "thrum"], ["aviao", "pop"], ["praca", "impact"],
    ["pres", "thrum"], ["buildP", "fill"], ["ou", "tick"], ["cong", "thrum"], ["buildC", "fill"], ["s1out", "whoosh"],
-   ["wall", "fill", {"ticks": 9, "dt": 0.065}], ["osdois", "impact"], ["mas", "tick"], ["wallout", "whoosh"],
+   ["osdois", "impact"], ["mas", "tick"],
    ["exec", "pop"], ["execsub", "tick"], ["adm", "tick"], ["din", "fill"], ["obr", "fill"], ["ser", "fill"],
-   ["s2bout", "whoosh"], ["legis", "pop"], ["legsub", "tick"], ["cria", "tick"], ["fisc", "tick"], ["beam", "sweep"], ["s2cout", "whoosh"]
+   ["s2bout", "whoosh"], ["legis", "pop"], ["legsub", "tick"], ["cria", "tick"], ["fisc", "tick"], ["beam", "sweep"], ["s2cout", "whoosh"],
+   ["s3t", "pop"], ["aprova", "tick"], ["viaja1", "whoosh"], ["sanc", "tick"], ["veta", "pop"], ["viaja2", "whoosh"], ["derruba", "thrum"], ["n257", "tick"], ["n41", "tick"], ["s3out", "whoosh"],
+   ["s4t", "pop"], ["seats", "fill", {"ticks": 12, "dt": 0.06}], ["n513", "tick"], ["caso", "tick"],
+   ["sim", "fill", {"ticks": 16, "dt": 0.1}], ["nao", "fill", {"ticks": 11, "dt": 0.1}], ["lim", "tick"], ["rej", "impact"], ["s4out", "whoosh"],
+   ["reset", "whoosh"], ["s5t", "pop"], ["votos", "tick"], ["com", "fill", {"ticks": 16, "dt": 0.1}], ["div", "fill", {"ticks": 6, "dt": 0.1}], ["contra", "fill", {"ticks": 8, "dt": 0.1}],
+   ["resp", "thrum"], ["s5out", "whoosh"],
+   ["marca", "impact"], ["prox", "tick"], ["cred", "tick"]
  ],
  "fill": {"ticks": 6, "dt": 0.1},
  "riser": [0.9, 5.2],

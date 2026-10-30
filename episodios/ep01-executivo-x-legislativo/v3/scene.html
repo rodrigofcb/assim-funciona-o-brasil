@@ -10,7 +10,7 @@
 <script src="engine3d.js"></script>
 <script src="../../../vinheta/mapa3d.js"></script>
 <style>
-:root{--g:#2BD66E;--y:#FFDF00;--over:cubic-bezier(.22,1.3,.36,1);--ease:cubic-bezier(.2,.8,.2,1)}
+:root{--g:#2BD66E;--y:#FFDF00;--bl:#B8E4FF;--over:cubic-bezier(.22,1.3,.36,1);--ease:cubic-bezier(.2,.8,.2,1)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-family:"Inter Display","Inter",system-ui,sans-serif;color:#fff}
 *,*::before,*::after{animation-play-state:paused !important}
@@ -19,8 +19,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 #cv{position:absolute;inset:0}
 #rays{position:absolute;left:-400px;top:-1300px;width:1880px;height:1880px;border-radius:50%;opacity:.7;
   background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,230,140,0) 0deg 7deg, rgba(255,230,140,.05) 7deg 9.5deg, rgba(255,230,140,0) 9.5deg 14deg);
-  -webkit-mask-image:radial-gradient(closest-side,#000 30%,transparent 100%);mask-image:radial-gradient(closest-side,#000 30%,transparent 100%);animation:rays 25.5s linear both}
-@keyframes rays{from{transform:rotate(-2deg)}to{transform:rotate(2deg)}}
+  -webkit-mask-image:radial-gradient(closest-side,#000 30%,transparent 100%);mask-image:radial-gradient(closest-side,#000 30%,transparent 100%);animation:rays 63.5s linear both}
+@keyframes rays{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
 #dust{position:absolute;inset:0;overflow:hidden}
 .p{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(255,240,200,.9),rgba(255,240,200,0));animation:drift linear infinite}
 @keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:var(--o)}85%{opacity:var(--o)}100%{transform:translate(var(--dx),var(--dy));opacity:0}}
@@ -28,17 +28,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 .tag{position:absolute;left:84px;width:912px;text-align:center;font-size:40px;font-weight:700;letter-spacing:.16em;word-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.85);text-shadow:0 6px 24px rgba(0,0,0,.8)}
 .tag .w{animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards}
 
-/* composição geométrica modular (transição "Os dois"): módulos grandes, sem rejunte, ordem sorteada */
-#geo{position:absolute;inset:0;width:1080px;height:1920px}
-#geo .blk{transform-box:fill-box;animation:gIn .55s var(--over) var(--din) both, gOut .45s var(--ease) var(--dout) forwards}
-@keyframes gIn{from{transform:scale(0)}to{transform:scale(1)}}
-@keyframes gOut{from{transform:scale(1)}to{transform:scale(0)}}
-.navy{color:#0B2A6F !important;text-shadow:none !important}
-.navy .y{color:#1E4FA6;background:#F5C800;padding:0 14px;border-radius:12px}
-#grain2{position:absolute;inset:-10%;opacity:.09;mix-blend-mode:multiply;pointer-events:none;animation:grain .6s steps(6) infinite, gin .3s linear var(--b-wall) both, gout .3s linear var(--b-wallout) forwards;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
-@keyframes gin{from{opacity:0}to{opacity:.09}}@keyframes gout{to{opacity:0}}
-/* pinos sobre os ministérios */
+/* pinos sobre os ministérios e rótulos ancorados a pontos 3D */
 #pins{position:absolute;inset:0}
 .pin{position:absolute;left:0;top:0;width:260px;display:flex;justify-content:center}
 .pin>div{display:flex;flex-direction:column;align-items:center;gap:10px;animation:wIn .6s var(--over) var(--in) both}
@@ -46,6 +36,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 .pin .ic svg{width:54px;height:54px}
 .pin .nm{font-size:27px;font-weight:700;color:#fff;letter-spacing:.02em;text-shadow:0 4px 16px rgba(0,0,0,.8);background:rgba(6,20,50,.75);padding:6px 16px;border-radius:999px}
 .pin .stem{width:3px;height:40px;background:linear-gradient(to bottom,var(--g),rgba(43,214,110,0))}
+.lab{position:absolute;left:0;top:0;width:900px;display:flex;justify-content:center}
+.lab>div{display:flex;flex-direction:column;align-items:center;gap:8px;animation:wIn .55s var(--over) var(--in) both, tOut .4s var(--ease) var(--out) forwards}
+.lab .nm{font-size:40px;font-weight:800;letter-spacing:-.01em;word-spacing:.12em;color:#fff;text-shadow:0 4px 16px rgba(0,0,0,.8);background:rgba(6,20,50,.82);padding:12px 26px;border-radius:999px;border:2px solid rgba(255,255,255,.25);white-space:nowrap}
+.lab .stem{width:3px;height:54px;background:linear-gradient(to bottom,rgba(255,255,255,.9),rgba(255,255,255,0))}
+.lab.g .nm{border-color:var(--g)}.lab.g .stem{background:linear-gradient(to bottom,var(--g),rgba(43,214,110,0))}
+.lab.y .nm{border-color:var(--y)}.lab.y .stem{background:linear-gradient(to bottom,var(--y),rgba(255,223,0,0))}
+.lab.sm .nm{font-size:32px;padding:8px 20px}
 
 /* texto */
 #ui{position:absolute;inset:0}
@@ -58,11 +55,28 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 .h2{font-size:96px;font-weight:900;letter-spacing:-.015em;word-spacing:.12em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.6)}
 .m{font-size:66px;font-weight:800;letter-spacing:-.01em;word-spacing:.12em;line-height:1.1;text-shadow:0 8px 30px rgba(0,0,0,.6)}
 .s{font-size:44px;font-weight:600;letter-spacing:.01em;word-spacing:.14em;color:rgba(255,255,255,.74);line-height:1.25;text-shadow:0 4px 16px rgba(0,0,0,.6)}
-.g{color:var(--g)}.y{color:var(--y)}
+.g{color:var(--g)}.y{color:var(--y)}.bl{color:var(--bl)}
 .lbl{position:absolute;font-size:58px;font-weight:800;letter-spacing:-.01em;word-spacing:.12em;text-shadow:0 8px 30px rgba(0,0,0,.7)}
 .item{display:block;font-size:64px;font-weight:800;letter-spacing:-.01em;word-spacing:.12em;line-height:1;margin-top:26px}
 .item i{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--g);margin-right:22px;vertical-align:middle;box-shadow:0 0 18px rgba(43,214,110,.8)}
+.item i.y{background:var(--y);box-shadow:0 0 18px rgba(255,223,0,.8)}.item i.bl{background:var(--bl);box-shadow:0 0 18px rgba(184,228,255,.8)}
+.item i.o{background:transparent;border:3px solid #fff;box-shadow:none}.item i.d{background:rgba(184,228,255,.25);box-shadow:none}
 .foot{position:absolute;left:84px;bottom:300px;width:912px;text-align:center;font-size:24px;color:rgba(255,255,255,.42);line-height:1.3}
+.src{position:absolute;left:84px;bottom:300px;width:912px;text-align:center;font-size:28px;font-weight:600;color:rgba(255,255,255,.62);line-height:1.3;text-shadow:0 4px 16px rgba(0,0,0,.8)}
+
+/* contadores animados (propriedade registrada → counter()) */
+@property --n{syntax:'<integer>';inherits:true;initial-value:0}
+.num{display:inline-block;--n:0;animation:cnt var(--dur,1.6s) cubic-bezier(.45,0,.55,1) var(--in) both;font-variant-numeric:tabular-nums}
+.num::after{counter-reset:n var(--n);content:counter(n)}
+.big{font-size:130px;font-weight:900;letter-spacing:-.03em;line-height:1;text-shadow:0 10px 40px rgba(0,0,0,.6)}
+.big small{font-size:52px;font-weight:800;letter-spacing:0;margin-left:14px;vertical-align:baseline}
+.cnt{position:absolute;left:84px;width:912px;display:flex;justify-content:space-between;align-items:flex-end}
+.stamp{position:absolute;left:50%;top:1120px;transform:translate(-50%,-50%) rotate(-7deg);padding:18px 44px;border:8px solid #fff;border-radius:18px;font-size:112px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.7);
+  box-shadow:0 0 0 6px rgba(4,11,30,.6), 0 20px 60px rgba(0,0,0,.6);background:rgba(4,11,30,.55);animation:stampIn .35s cubic-bezier(.2,1.5,.4,1) var(--in) both, tOut .45s var(--ease) var(--out) forwards}
+@keyframes stampIn{from{opacity:0;transform:translate(-50%,-50%) rotate(-7deg) scale(2.2)}to{opacity:1;transform:translate(-50%,-50%) rotate(-7deg) scale(1)}}
+.brand{position:absolute;left:84px;width:912px;top:640px;text-align:center}
+.brand img{width:300px;height:300px;border-radius:50%;box-shadow:0 20px 70px rgba(0,0,0,.6);display:block;margin:0 auto 34px}
+.cred{position:absolute;left:84px;width:912px;top:1540px;text-align:center;font-size:27px;line-height:1.5;color:rgba(255,255,255,.62)}
 
 /* acabamento */
 #grain{position:absolute;inset:-10%;opacity:.11;mix-blend-mode:overlay;pointer-events:none;
@@ -70,7 +84,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
   animation:grain .6s steps(6) infinite}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-40px,30px)}40%{transform:translate(30px,-50px)}60%{transform:translate(-60px,-20px)}80%{transform:translate(50px,40px)}100%{transform:translate(0,0)}}
 #vig{position:absolute;inset:0;background:radial-gradient(115% 85% at 50% 45%, rgba(0,0,0,0) 50%, rgba(0,0,0,.62) 100%)}
-#fadeout{position:absolute;inset:0;background:#040B1E;opacity:0;animation:fo .9s var(--ease) 24.6s both}
+#fadeout{position:absolute;inset:0;background:#040B1E;opacity:0;animation:fo .8s var(--ease) var(--b-fade) both}
 @keyframes fo{to{opacity:1}}
 </style>
 </head>
@@ -82,12 +96,19 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
 
   <div class="tag abs" style="top:1500px"><span class="w" data-in="bsb" style="--out:3.3s">Brasília</span></div>
   <div class="tag abs" style="top:1500px"><span class="w" data-in="aviao" style="--out:5.0s">Plano Piloto</span></div>
-  <svg id="geo" viewBox="0 0 1080 1920"></svg><div id="grain2"></div>
   <div id="pins">
     <div class="pin" data-key="fazenda"><div data-in="din"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round"><circle cx="32" cy="32" r="22"/><path d="M26 40c0 3 3 5 6 5s6-2 6-5-3-4-6-5-6-2-6-5 3-5 6-5 6 2 6 5M32 17v4M32 43v4"/></svg></div><div class="nm">Fazenda</div><div class="stem"></div></div></div>
     <div class="pin" data-key="transportes"><div data-in="obr"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 54h44M14 54V22l20-10v42M34 22h16v32M22 24v4M22 34v4M22 44v4M42 30v4M42 40v4"/></svg></div><div class="nm">Transportes</div><div class="stem"></div></div></div>
     <div class="pin" data-key="saude"><div data-in="ser"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="40" rx="6"/><path d="M32 22v20M22 32h20"/></svg></div><div class="nm">Saúde</div><div class="stem"></div></div></div>
     <div class="pin" data-key="educacao"><div data-in="ser"><div class="ic"><svg viewBox="0 0 64 64" fill="none" stroke="#2BD66E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24l24-10 24 10-24 10z"/><path d="M18 29v12c0 4 7 7 14 7s14-3 14-7V29M56 24v14"/></svg></div><div class="nm">Educação</div><div class="stem"></div></div></div>
+    <!-- cena 3: rótulos ancorados aos prédios -->
+    <div class="lab y" data-key="congresso" data-from="aprova" data-to="sanc"><div data-in="aprova" style="--out:var(--b-sanc)"><div class="nm">o Congresso <span class="y">aprova</span></div><div class="stem"></div></div></div>
+    <div class="lab g" data-key="planalto" data-from="sanc" data-to="veta"><div data-in="sanc" style="--out:var(--b-veta)"><div class="nm">o presidente <span class="g">sanciona</span>…</div><div class="stem"></div></div></div>
+    <div class="lab" data-key="planalto" data-from="veta" data-to="derruba"><div data-in="veta" style="--out:var(--b-derruba)"><div class="nm">…ou <span style="color:#fff">veta</span></div><div class="stem"></div></div></div>
+    <div class="lab y" data-key="congresso" data-from="derruba" data-to="s3out"><div data-in="derruba" style="--out:var(--b-s3out)"><div class="nm">o Congresso pode <span class="y">derrubar o veto</span></div><div class="stem"></div></div></div>
+    <!-- cena 4: rótulos do hemiciclo -->
+    <div class="lab sm" data-key="hemi" data-from="n513" data-to="sim"><div data-in="n513" style="--out:var(--b-sim)"><div class="nm">513 deputados</div><div class="stem"></div></div></div>
+    <div class="lab sm" data-key="quorum" data-from="lim" data-to="reset"><div data-in="lim" style="--out:var(--b-reset)"><div class="nm">precisava de <b>257</b></div><div class="stem"></div></div></div>
   </div>
 
   <div id="ui">
@@ -98,7 +119,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
     <div class="t lbl" style="left:84px;width:912px;top:500px;--out:var(--b-s1out)"><span class="w g" data-in="pres">o presidente</span> <span class="w" data-in="ou" style="color:rgba(255,255,255,.6);margin:0 .25em">ou</span> <span class="w y" data-in="cong">o Congresso?</span></div>
 
     <!-- cena 2a -->
-    <div class="t navy" style="top:780px;text-align:center;--out:var(--b-s2aout)">
+    <div class="t" style="top:200px;text-align:center;--out:var(--b-s2aout)">
       <div class="h" style="font-size:150px"><span class="w" data-in="osdois">Os dois.</span></div>
       <div class="m" style="margin-top:26px"><span class="w" data-in="mas">Mas em <span class="y">coisas diferentes</span>.</span></div>
     </div>
@@ -120,7 +141,55 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
       <div class="m" style="margin-top:50px"><span class="b" data-in="cria">cria as <span class="y">regras</span></span><span class="b" data-in="fisc" style="margin-top:18px">e <span class="y">fiscaliza</span> quem administra</span></div>
     </div>
 
-    <div class="foot">Assim Funciona o Brasil · ep. 1 · mapa © OpenStreetMap contributors · fronteiras Natural Earth</div>
+    <!-- cena 3: a lei precisa dos dois -->
+    <div class="t" style="top:200px;--out:var(--b-s3out)">
+      <div class="h2"><span class="w" data-in="s3t">Uma lei precisa dos dois.</span></div>
+    </div>
+    <div class="t" style="top:1250px;text-align:center;--out:var(--b-s3out)">
+      <div class="s" style="margin-bottom:12px"><span class="w" data-in="n257">para derrubar um veto:</span></div>
+      <div class="big y"><span class="w" data-in="n257"><span class="num" data-in="n257" style="--to:257;--dur:.9s"></span><small>deputados</small></span></div>
+      <div class="big y" style="margin-top:10px"><span class="w" data-in="n41">+ <span class="num" data-in="n41" style="--to:41;--dur:.7s"></span><small>senadores</small></span></div>
+      <div class="s" style="margin-top:18px"><span class="w" data-in="n41">metade mais um de cada casa</span></div>
+    </div>
+
+    <!-- cena 4: maioria nem sempre basta -->
+    <div class="t" style="top:400px;--out:var(--b-s4out)">
+      <div class="h2"><span class="b" data-in="s4t">Mas maioria</span><span class="b" data-in="s4t">nem sempre basta.</span></div>
+      <div class="s" style="margin-top:28px"><span class="w" data-in="caso">PLP 281/2019 · regras para bancos em crise<br>Câmara, 14 de outubro de 2026</span></div>
+    </div>
+    <div class="cnt" style="top:810px;--out:var(--b-s4out)">
+      <div class="big y w" data-in="sim" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><span class="num" data-in="sim" style="--to:252"></span><small>sim</small></div>
+      <div class="big bl w" data-in="nao" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards"><span class="num" data-in="nao" style="--to:176;--dur:1.2s"></span><small>não</small></div>
+    </div>
+    <div class="stamp" data-in="rej" style="--out:var(--b-s4out)">Rejeitado</div>
+    <div class="t" style="top:1225px;text-align:center;--out:var(--b-s4out)"><div class="m"><span class="w" data-in="rej">faltaram <span class="y">5</span> votos</span></div></div>
+    <div class="src" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards" data-in="caso" data-out="s4out">dados: Câmara dos Deputados · via Politicômetro (politicometro.org)</div>
+
+    <!-- cena 5: então, quem manda? -->
+    <div class="t" style="top:400px;--out:var(--b-s5out)">
+      <div class="h2" style="font-size:84px"><span class="w" data-in="s5t">Então, quem manda?</span></div>
+    </div>
+    <div class="t" style="top:530px;--out:var(--b-resp)">
+      <div class="s"><span class="w" data-in="votos">Em <b style="color:#fff">1.148</b> votações da Câmara desde 2023:</span></div>
+      <span class="item b" data-in="com"><i></i><span class="num g" data-in="com" style="--to:345"></span> <span class="g">votam com</span> o governo</span>
+      <span class="item b" data-in="div"><i class="o"></i><span class="num" data-in="div" style="--to:63;--dur:.7s"></span> dividem</span>
+      <span class="item b" data-in="contra"><i class="bl"></i><span class="num bl" data-in="contra" style="--to:86;--dur:.9s"></span> <span class="bl">votam contra</span></span>
+      <span class="item b" data-in="contra" style="font-size:34px;font-weight:600;color:rgba(255,255,255,.55);margin-top:18px"><i class="d" style="width:16px;height:16px;margin-left:3px;margin-right:25px"></i>19 sem classificação</span>
+    </div>
+    <div class="t" style="top:560px;--out:var(--b-s5out)"><div class="m" style="font-size:72px"><span class="w" data-in="resp">O presidente governa com a maioria que <span class="g">constrói</span> no <span class="y">Congresso</span>.</span></div></div>
+    <div class="src" style="animation:wIn .6s var(--over) var(--in) both, tOut .45s var(--ease) var(--out) forwards" data-in="votos" data-out="s5out">votações nominais, mar/2023 a out/2026 · critério e dados: Politicômetro (politicometro.org)</div>
+
+    <!-- cena 6: marca -->
+    <div class="brand">
+      <div class="b" data-in="marca"><img src="../../../brand/avatar_D_verde_globo_sem_furo.png" alt=""></div>
+      <div class="h2 b" data-in="marca" style="font-size:84px">Assim Funciona<br>o Brasil</div>
+      <div class="s b" data-in="marca" style="margin-top:18px">@assim_funciona_o_brasil</div>
+      <div class="s b" data-in="prox" style="margin-top:70px">próximo episódio:</div>
+      <div class="m b y" data-in="prox" style="margin-top:8px">por que o Congresso tem duas casas?</div>
+    </div>
+    <div class="cred b" data-in="cred">dados: Câmara dos Deputados, via Politicômetro · mapa © OpenStreetMap contributors · fronteiras Natural Earth<br>violão: amostras FluidR3 (Frank Wen, CC BY 3.0) · trilha e efeitos originais</div>
+
+    <div class="foot" data-out="s3t" style="animation:tOut .45s var(--ease) var(--out) forwards">Assim Funciona o Brasil · ep. 1 · mapa © OpenStreetMap contributors · fronteiras Natural Earth</div>
   </div>
 
   <div id="grain"></div><div id="vig"></div><div id="fadeout"></div>
@@ -132,37 +201,15 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#040B1E;font-fam
   const R=document.documentElement.style;
   for(const k in TL.beats) R.setProperty('--b-'+k, TL.beats[k]+'s');
   document.querySelectorAll('[data-in]').forEach(e=>e.style.setProperty('--in', TL.beats[e.dataset.in]+'s'));
+  document.querySelectorAll('[data-out]').forEach(e=>e.style.setProperty('--out', TL.beats[e.dataset.out]+'s'));
+  // contadores: um @keyframes por elemento (var() dentro de keyframes não anima a propriedade registrada)
+  let css=''; document.querySelectorAll('.num').forEach((e,i)=>{const to=(e.style.getPropertyValue('--to')||'0').trim(); css+=`@keyframes cnt${i}{from{--n:0}to{--n:${to}}}`; e.style.animationName='cnt'+i;});
+  const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
   let seed=7; const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
   const dust=document.getElementById('dust');
   for(let i=0;i<30;i++){const p=document.createElement('div');p.className='p';const z=rnd();const sz=4+z*14;
     p.style.cssText=`left:${(rnd()*1080).toFixed(0)}px;top:${(400+rnd()*1100).toFixed(0)}px;width:${sz}px;height:${sz}px;filter:blur(${(1-z)*2.5}px);--o:${(.2+z*.5).toFixed(2)};--dx:${((rnd()-.5)*160).toFixed(0)}px;--dy:${(-60-rnd()*160).toFixed(0)}px;animation-duration:${(7+rnd()*9).toFixed(1)}s;animation-delay:-${(rnd()*12).toFixed(1)}s`;
     dust.appendChild(p);}
-  // composição geométrica: grade 3x5 com blocos mesclados (1x1, 2x1, 2x2), faixa central lisa para o texto.
-  // Lógica: poucos módulos, poucas cores, arranjo e ordem de entrada sorteados com semente fixa.
-  const NS='http://www.w3.org/2000/svg', geo=document.getElementById('geo'), B=TL.beats;
-  let gs=7919; const gr=()=>{gs=(gs*16807)%2147483647;return gs/2147483647;};
-  const CW=360, CH=384, COLS=3, ROWS=5; const used=Array.from({length:ROWS},()=>Array(COLS).fill(false)); const blocks=[];
-  for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){ if(used[r][c]) continue;
-    let w=1,hh=1; if(r!==2 && r+1<ROWS && r+1!==2 && c+1<COLS && !used[r][c+1] && !used[r+1][c] && !used[r+1][c+1] && gr()<0.35){w=2;hh=2;}
-    else if(c+1<COLS && !used[r][c+1] && gr()<0.3){w=2;}
-    for(let dr=0;dr<hh;dr++) for(let dc=0;dc<w;dc++) used[r+dr][c+dc]=true;
-    blocks.push({x:c*CW,y:r*CH,w:w*CW,h:hh*CH,plain:r===2});}
-  const shapes=[
-    (w,h,col)=>`<path d="M0 0 H${w} A${w} ${h} 0 0 1 0 ${h} Z" fill="${col}"/>`,
-    (w,h,col)=>`<polygon points="0,0 ${w},0 0,${h}" fill="${col}"/>`,
-    (w,h,col)=>`<path d="M0 ${h} A${w/2} ${h*0.9} 0 0 1 ${w} ${h} Z" fill="${col}"/>`,
-    (w,h,col)=>`<rect x="0" y="0" width="${w*0.42}" height="${h}" fill="${col}"/>`,
-    (w,h,col)=>`<path d="M0 ${h} A${w} ${h} 0 0 1 ${w} 0 L${w} ${h*0.32} A${w*0.68} ${h*0.68} 0 0 0 ${w*0.32} ${h} Z" fill="${col}"/>`,
-  ];
-  const order=blocks.map((_,i)=>i).sort(()=>gr()-0.5);
-  blocks.forEach((b,i)=>{
-    const g=document.createElementNS(NS,'g'); g.setAttribute('class','blk');
-    const corner=[['0%','0%'],['100%','0%'],['0%','100%'],['100%','100%']][Math.floor(gr()*4)]; g.style.transformOrigin=corner.join(' ');
-    const u=gr(); const col=u<0.08?'#F5C800':(u<0.14?'#1C9A4A':'#1E4FA6'); const sx=gr()<0.5?1:-1, sy=gr()<0.5?1:-1;
-    const inner=b.plain?'':`<g transform="translate(${b.w/2} ${b.h/2}) scale(${sx} ${sy}) translate(${-b.w/2} ${-b.h/2})">${shapes[Math.floor(gr()*shapes.length)](b.w,b.h,col)}</g>`;
-    g.innerHTML=`<g transform="translate(${b.x} ${b.y})"><rect width="${b.w}" height="${b.h}" fill="#F2EFE6"/>${inner}</g>`;
-    const k=order.indexOf(i); g.style.setProperty('--din',(B.wall+k*0.065).toFixed(3)+'s'); g.style.setProperty('--dout',(B.wallout+(order.length-1-k)*0.04).toFixed(3)+'s');
-    geo.appendChild(g);});
 })();
 window.TOTAL=TL.end;
 window.seek=function(ms){draw3d(ms/1000);document.getAnimations().forEach(a=>{a.currentTime=ms;});return document.getAnimations().length;};

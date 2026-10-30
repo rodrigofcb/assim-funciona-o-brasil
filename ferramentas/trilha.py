@@ -37,7 +37,7 @@ def note(m, vel, dur, harmonic=False):
     return y * (0.2 + 0.8 * (vel / 127) ** 1.4)
 
 # janelas de silêncio em volta dos impactos
-IMPACTS = [B[k] for k in ("brasil", "praca", "osdois", "pres", "cong") if k in B]
+IMPACTS = [B[k] for k in ("brasil", "praca", "osdois", "pres", "cong", "rej", "marca") if k in B]
 def clear(t): return all(not (b - 0.06 <= t <= b + 0.28) for b in IMPACTS)
 def place(sig, t, pan=0.0):
     o = max(0, int(t * SR)); n = min(len(sig), N - o)
@@ -110,7 +110,52 @@ for k, iv in (("cria", (71, 74)), ("fisc", (69, 73))):
 # --- 7) holofote → fim: a assinatura uma oitava acima sobre acorde de D, e deixa soar
 if g("beam") is not None:
     strum(D, g("beam") + 0.2, vel=60, dur=3.5); motif(g("beam") + 0.6, base=81, vel=64)
-    arp(D, g("beam") + 3.0, END - 1.0, BEAT, vel=44, thin=0.6)
+    arp(D, g("beam") + 3.0, g("s2cout", END - 1.3) + 0.3, BEAT, vel=44, thin=0.6)
+# --- 8) a lei viaja: colcheias leves G → D → Em → A7; escala sobe na ida e desce na volta; acentos nos números
+if g("s3t") is not None:
+    s3t, s3o = g("s3t"), g("s3out", g("s3t") + 10)
+    seq = [G, D, Em, A7]; t = s3t + 0.3; i = 0
+    while t < s3o - 0.5:
+        arp(seq[i % 4], t, t + 2 * BEAT, BEAT / 2, vel=44, thin=0.75, add_oct=False); t += 2 * BEAT; i += 1
+    TR = TL.get("travel", 1.1)
+    for k, scale in (("viaja1", [62, 64, 66, 67, 69, 71, 73, 74]), ("viaja2", [74, 73, 71, 69, 67, 66, 64, 62])):
+        if g(k) is None: continue
+        for j, m in enumerate(scale): play(m, g(k) + j * TR / len(scale), 58 + 2 * j, 0.45, 0.2 if k == "viaja1" else -0.2, force=True)
+    if g("sanc") is not None: play(78, g("sanc") + 0.03, 66, 1.6, 0.1, force=True); play(74, g("sanc") + 0.03, 52, 1.6, -0.1, force=True)
+    if g("veta") is not None: play(61, g("veta") + 0.03, 60, 0.5, 0.0, force=True); play(38, g("veta") + 0.03, 56, 1.0, -0.2, force=True)   # Db contra o baixo D: tensão curta
+    if g("derruba") is not None: strum(A7, g("derruba") + 0.05, vel=56, dur=0.9); strum(D, g("derruba") + 0.55, vel=62, dur=2.2)
+    for k, m in (("n257", 81), ("n41", 78)):
+        if g(k) is not None: play(m, g(k) + 0.03, 66, 1.4, 0.0, harmonic=True, force=True)
+# --- 9) maioria nem sempre basta: pedal em Si menor, esparso; a contagem sobe com o arpejo e cai no "não"; silêncio antes do carimbo
+if g("s4t") is not None:
+    s4t, rej, s4o = g("s4t"), g("rej", g("s4t") + 7.5), g("s4out", g("s4t") + 10.4)
+    t = s4t + 0.2; k = 0
+    while t < rej - 0.6:
+        play(47, t, 54, 2 * BEAT, -0.15); play(59 if k % 2 == 0 else 62, t + BEAT, 40, BEAT, 0.15); t += 2 * BEAT; k += 1
+    if g("sim") is not None:  # subida em Bm acompanhando a contagem (1,6 s)
+        up = [47, 50, 54, 59, 62, 66, 71, 74]
+        for j, m in enumerate(up): play(m, g("sim") + j * 1.6 / len(up), 48 + 3 * j, 0.6, 0.1, force=True)
+    if g("nao") is not None:
+        dn = [74, 71, 66, 62, 59, 54]
+        for j, m in enumerate(dn): play(m, g("nao") + j * 1.2 / len(dn), 60 - 2 * j, 0.6, -0.1, force=True)
+    if g("lim") is not None: play(69, g("lim") + 0.03, 58, 1.2, 0.0, harmonic=True, force=True)
+    strum([35, 47, 54, 59], rej + 0.12, vel=64, dur=3.0, pan=0.0, spread=0.03)   # Bm grave no carimbo
+    arp(Bm, rej + 1.6, s4o - 0.3, BEAT, vel=40, thin=0.5, add_oct=False)
+# --- 10) então, quem manda?: volta a Ré maior; baixo caminha; a assinatura responde em "resp"
+if g("s5t") is not None:
+    s5t, resp, s5o = g("s5t"), g("resp", g("s5t") + 7), g("s5out", g("s5t") + 9.4)
+    baixaria(s5t + 0.3, resp - 0.4, [38, 43, 45, 38], vel=52)
+    t = s5t + 0.3 + BEAT * 0.5; i = 0
+    while t < resp - 0.8:
+        strum([D, G, A7, D][(i // 2) % 4][1:], t, vel=36, dur=0.35, pan=0.3, spread=0.01); t += BEAT; i += 1
+    for k, m in (("com", 74), ("div", 71), ("contra", 69)):
+        if g(k) is not None: play(m, g(k) + 0.03, 68, 1.2, 0.0, force=True)
+    strum(D, resp + 0.1, vel=64, dur=3.0); motif(resp + 0.45)
+    arp(D, resp + 2.8, s5o - 0.2, BEAT, vel=42, thin=0.6)
+# --- 11) marca: acorde final, harmônico agudo, arpejo que se apaga
+if g("marca") is not None:
+    strum(D, g("marca") + 0.1, vel=68, dur=4.0, spread=0.02); play(86, g("marca") + 0.5, 52, 3.0, 0.0, harmonic=True, force=True)
+    arp(D, g("marca") + 2.0, END - 1.5, BEAT, vel=40, thin=0.5)
 
 # sala pequena, corte de sub-grave, normalização
 n = int(0.9 * SR); ir = rng.normal(0, 1, n) * np.exp(-np.arange(n) / SR * 6); ir = sosfilt(butter(2, 4500 / (SR / 2), btype="low", output="sos"), ir); ir /= np.abs(ir).sum() / 1.4
