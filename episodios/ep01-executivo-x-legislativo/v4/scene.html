@@ -13,7 +13,7 @@
 window.THEME = {
   col:  { line: '176,186,198' },
   base: { fog: '255,255,255', fogA: 0, land: '176,186,198', water: '40,110,170', waterLine: '90,170,230', foot: '176,186,198',
-          aMinor: .22, aMid: .42, aMajor: .70, aFoot: .30, aExtr: .45 },
+          aMinor: .10, aMid: .36, aMajor: .70, aFoot: .12, aExtr: .40 },
   col3d:{ sub: '236,240,244', yes: '43,214,110', no: '229,50,45', dim: '176,186,198' },   // assentos: a favor verde, contra vermelho (mesmas cores dos ícones)
   glow: { model: 0, lit: 0, pulse: 1.2, hl: 0, seat: .04 }                                // brilho só nos pulsos (ênfase); o contraste já destaca os prédios
 };
@@ -53,6 +53,17 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 .lab.g .nm{border-color:var(--g)}.lab.g .stem{background:linear-gradient(to bottom,var(--g),rgba(43,214,110,0))}
 .lab.y .nm{border-color:var(--y)}.lab.y .stem{background:linear-gradient(to bottom,var(--y),rgba(255,223,0,0))}
 .lab.sm .nm{font-size:32px;padding:8px 20px}
+
+/* véu: gradiente do fundo atrás de cada bloco de texto, para o mapa não embolar com as letras.
+   Os véus ficam numa camada própria (#veils, logo acima do canvas), para nunca escurecer o texto de outro bloco. */
+:root{--veil:.70}
+#veils{position:absolute;inset:0;pointer-events:none}
+.veil{position:absolute;animation:veilIn .6s var(--ease) var(--in) both, veilOut .45s var(--ease) var(--out) forwards}
+.veil::before{content:"";position:absolute;left:-240px;right:-240px;top:-130px;bottom:-120px;
+  background:radial-gradient(ellipse 100% 100% at 50% 50%, rgba(6,14,36,var(--veil)) 28%, rgba(6,14,36,0) 72%)}
+.veil.small::before{top:-90px;bottom:-90px;left:-120px;right:-120px;background:radial-gradient(ellipse 100% 100% at 50% 50%, rgba(6,14,36,calc(var(--veil)*.9)) 20%, rgba(6,14,36,0) 72%)}
+@keyframes veilIn{from{opacity:0}to{opacity:1}}
+@keyframes veilOut{to{opacity:0}}
 
 /* texto */
 #ui{position:absolute;inset:0}
@@ -218,6 +229,13 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
   for(const k in TL.beats) R.setProperty('--b-'+k, TL.beats[k]+'s');
   document.querySelectorAll('[data-in]').forEach(e=>e.style.setProperty('--in', TL.beats[e.dataset.in]+'s'));
   document.querySelectorAll('[data-out]').forEach(e=>e.style.setProperty('--out', TL.beats[e.dataset.out]+'s'));
+  document.querySelectorAll('.t,.cnt,.brand').forEach(b=>{const ins=[...b.querySelectorAll('[data-in]')].map(e=>TL.beats[e.dataset.in]).filter(x=>x!==undefined); if(ins.length) b.style.setProperty('--in', Math.min(...ins)+'s');});
+  const stage=document.getElementById('stage'), veils=document.createElement('div'); veils.id='veils'; stage.insertBefore(veils, document.getElementById('dust'));
+  const sr=stage.getBoundingClientRect();
+  document.querySelectorAll('.t,.cnt,.brand,.src,.foot').forEach(b=>{const r=b.getBoundingClientRect(), cs=getComputedStyle(b);
+    const v=document.createElement('div'); v.className='veil'+(b.matches('.src,.foot')?' small':'');
+    v.style.cssText=`left:${r.left-sr.left}px;top:${r.top-sr.top}px;width:${r.width}px;height:${r.height}px;--in:${cs.getPropertyValue('--in').trim()||'0s'};--out:${cs.getPropertyValue('--out').trim()||'999s'}`;
+    veils.appendChild(v);});
   // contadores: um @keyframes por elemento (var() dentro de keyframes não anima a propriedade registrada)
   let css=''; document.querySelectorAll('.num').forEach((e,i)=>{const to=(e.style.getPropertyValue('--to')||'0').trim(); css+=`@keyframes cnt${i}{from{--n:0}to{--n:${to}}}`; e.style.animationName='cnt'+i;});
   const st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
