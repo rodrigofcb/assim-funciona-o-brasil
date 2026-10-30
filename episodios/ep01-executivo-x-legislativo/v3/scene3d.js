@@ -18,12 +18,13 @@
 
   // ---- câmera interpolada (smoothstep entre keyframes)
   function camAt(t) {
+    if (TL.zoom && t < TL.handoff) return Mapa3D.camAt(t, TL.zoom);
     const K = TL.cam; let i = 0; while (i < K.length - 2 && t > K[i + 1][0]) i++;
     const a = K[i], b = K[i + 1]; const k = sm((t - a[0]) / Math.max(1e-6, b[0] - a[0]));
     const v = j => lerp(a[j], b[j], k);
     const pos = [v(1), v(2), v(3)], tgt = [v(4), v(5), v(6)], fov = v(7);
     const ua = a[8] || [0, 0, 1], ub = b[8] || [0, 0, 1]; const up = E3.norm([lerp(ua[0], ub[0], k), lerp(ua[1], ub[1], k), lerp(ua[2], ub[2], k)]);
-    return cameraUp(pos, tgt, fov, up);
+    return Mapa3D.make(pos, tgt, fov, up, pos[2]);
   }
   function cameraUp(pos, target, fovDeg, up) {
     const f = E3.norm(E3.sub(target, pos));
@@ -103,24 +104,8 @@
 
   window.draw3d = function (t) {
     const c = camAt(t);
-    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    const D = c.dist; const px = m => Math.max(0.6, Math.min(5, m * c.fl / D));   // largura em px de 'm' metros na distância do alvo
-    const topDown = Math.abs(c.f[2]) > 0.9;
-    // chão: névoa radial centrada no alvo
-    const tq = P(c, [c.pos[0] + c.f[0] * D, c.pos[1] + c.f[1] * D, 0]) || [W / 2, H / 2];
-    const g = ctx.createRadialGradient(tq[0], tq[1], 0, tq[0], tq[1], topDown ? 1500 : 1100);
-    g.addColorStop(0, 'rgba(70,120,220,0.20)'); g.addColorStop(1, 'rgba(70,120,220,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-    // água, plantas, vias
-    if (batch(c, M.water, 0, true)) { ctx.fillStyle = 'rgba(80,150,255,0.10)'; ctx.fill(); }
-    if (batch(c, foot, 0, true)) { ctx.fillStyle = 'rgba(120,180,255,0.07)'; ctx.fill(); ctx.lineWidth = px(1.2); ctx.strokeStyle = `rgba(${COL.line},0.22)`; ctx.stroke(); }
-    strokeLines(c, M.roads.minor, px(1.0), 0.16);
-    strokeLines(c, M.roads.mid, px(2.2), 0.32);
-    strokeLines(c, M.roads.major, px(4.5), 0.55);
-    // extrusões (ministérios e outros prédios altos), com fade por distância
-    ctx.beginPath(); let anyE = false;
-    for (const e of extr) { const d = Math.hypot(e.c[0] - c.pos[0], e.c[1] - c.pos[1]); if (d > 2.2 * D + 400) continue; const q = P(c, [e.c[0], e.c[1], 0]); if (!onScreen(q)) continue; anyE = true;
-      for (const pl of e.lines) { let pen = false; for (const p of pl) { const qq = P(c, p); if (!qq) { pen = false; continue; } if (!pen) { ctx.moveTo(qq[0], qq[1]); pen = true; } else ctx.lineTo(qq[0], qq[1]); } } }
-    if (anyE) { ctx.lineWidth = px(1.4); ctx.strokeStyle = `rgba(${COL.line},${topDown ? 0.25 : 0.42})`; ctx.stroke(); }
+    const D = c.dist; const px = m => Math.max(0.6, Math.min(5, m * c.fl / D));
+    Mapa3D.drawBase(c, t, {});
     // destaques dos ministérios
     for (const k of hlKeys) { const b = B[TL.hl[k]]; const a = sm((t - b) / 0.6); if (a <= 0) continue;
       const ring = hlRings[k], lines = extrude(ring, 38);
