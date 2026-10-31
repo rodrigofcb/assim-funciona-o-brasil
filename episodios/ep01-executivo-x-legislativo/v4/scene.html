@@ -134,7 +134,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 
   <div id="ui">
     <!-- cena 1 -->
-    <div class="t" style="top:210px;--out:var(--b-s1out)">
+    <div class="t" data-veil="130" style="top:210px;--out:var(--b-s1out)">
       <div class="h"><span class="w" data-in="quem">Quem</span> <span class="w" data-in="manda">manda</span><br><span class="w y" data-in="brasil">no Brasil?</span></div>
     </div>
     <div class="t lbl" style="left:84px;width:912px;top:500px;--out:var(--b-s1out)"><span class="w g" data-in="pres">o presidente</span> <span class="w" data-in="ou" style="color:rgba(var(--inkrgb),.8);margin:0 .25em">ou</span> <span class="w y" data-in="cong">o Congresso?</span></div>
@@ -229,7 +229,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
   document.querySelectorAll('[data-veil]').forEach(b=>{ if(b.matches('.cred')) return;
     const r=b.getBoundingClientRect(), cs=getComputedStyle(b), v=document.createElement('div');
     const full=b.matches('.brand'); v.className='veil'+(full?' full':'');
-    const my=110; let L=0, T=r.top-sr.top-my, Wd=1080, Hg=r.height+2*my;   // faixa de borda a borda
+    const my=110, extra=parseFloat(b.dataset.veil)||0; let L=0, T=r.top-sr.top-my, Wd=1080, Hg=r.height+2*my+extra;   // faixa de borda a borda; data-veil="N" estende N px para baixo
     if(full){L=0;T=0;Wd=1080;Hg=1920;}
     v.style.cssText=`left:${L}px;top:${T}px;width:${Wd}px;height:${Hg}px;--in:${cs.getPropertyValue('--in').trim()||'0s'};--out:${cs.getPropertyValue('--out').trim()||'999s'}`;
     veils.appendChild(v);}); }
