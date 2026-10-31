@@ -49,6 +49,7 @@ with sync_playwright() as p:
 
 if mode == "full":
     out = folder / f"out{SUF}"
+    if not all((out / f"{n}.mp4").exists() for n, _, _ in TL["scenes"]): sys.exit(0)
     lst = out / "list.txt"
     lst.write_text("".join(f"file '{(out / f'{n}.mp4').as_posix()}'\n" for n, _, _ in TL["scenes"]))
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(out / "video.mp4")], check=True)
