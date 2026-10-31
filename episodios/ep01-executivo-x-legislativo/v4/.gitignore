@@ -1,4 +1,6 @@
 out/
+out-*/
 preview/
+preview-*/
 render.log
 preview_*.mp4

@@ -110,7 +110,7 @@
       const g = ctx.createRadialGradient(head[0], head[1], 0, head[0], head[1], 70); g.addColorStop(0, `rgba(${col},${0.55 * hold * pre})`); g.addColorStop(1, `rgba(${col},0)`);
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(head[0], head[1], 70, 0, 7); ctx.fill();
       ctx.save(); ctx.translate(head[0], head[1]); ctx.rotate(-0.25);
-      ctx.fillStyle = `rgba(255,255,255,${0.95 * hold})`; ctx.fillRect(-14, -19, 28, 38);
+      ctx.fillStyle = `rgba(${COL.w},${0.95 * hold})`; ctx.fillRect(-14, -19, 28, 38);
       ctx.fillStyle = `rgba(${col},${0.9 * hold})`; for (let k = 0; k < 4; k++) ctx.fillRect(-9, -12 + k * 8, k === 3 ? 10 : 18, 3);
       ctx.restore();
     }
@@ -176,7 +176,7 @@
     if (B.lim !== undefined && t >= B.lim && (B.reset === undefined || t < B.reset)) {
       const a = sm((t - B.lim) / 0.4) * (B.reset !== undefined ? 1 - sm((t - B.reset + 0.3) / 0.3) : 1);
       const ph = seatAt(V4.quorum).ph; const p0 = P(c, polar(R0 - 14, ph)), p1 = P(c, polar(RMAX + 26, ph));
-      if (p0 && p1) { ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.lineWidth = 7; ctx.strokeStyle = `rgba(255,255,255,${0.25 * a})`; ctx.stroke(); ctx.lineWidth = 3; ctx.strokeStyle = `rgba(255,255,255,${0.95 * a})`; ctx.stroke(); }
+      if (p0 && p1) { ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.lineWidth = 7; ctx.strokeStyle = `rgba(${COL.w},${0.25 * a})`; ctx.stroke(); ctx.lineWidth = 3; ctx.strokeStyle = `rgba(${COL.w},${0.95 * a})`; ctx.stroke(); }
     }
   }
   // ponto 3D de ancoragem para rótulos pinados

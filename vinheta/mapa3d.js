@@ -8,7 +8,7 @@ window.Mapa3D = (() => {
   const T = window.THEME || {};
   const COL = Object.assign({ line: '184,228,255', g: '43,214,110', y: '255,223,0', br: '255,236,120' }, T.col || {});
   const LAY = Object.assign({ fog: '70,120,220', fogA: 0.20, land: '120,180,255', water: '80,150,255', waterLine: '120,190,255', foot: '120,180,255',
-    aMinor: 0.16, aMid: 0.32, aMajor: 0.55, aFoot: 0.22, aExtr: 0.35 }, T.base || {});
+    aMinor: 0.16, aMid: 0.32, aMajor: 0.55, aFoot: 0.22, aExtr: 0.35, border: null, borderW: 2.4 }, T.base || {});
   let ctx, cv;
 
   // ---- câmera: [t, tx, ty, h, pitch(graus, 0=zenital), rumo(graus: de onde a câmera olha; 270 = norte para cima)]
@@ -86,7 +86,7 @@ window.Mapa3D = (() => {
     if (aPais > 0) {
       stroke(c, BR.viz, 1.2, 0.16 * aPais);
       fill(c, BR.br, 0.07 * aPais, LAY.land); stroke(c, ufRings, 1.1, 0.30 * aPais);
-      stroke(c, BR.br, 2.4, 0.95 * aPais, COL.br);
+      stroke(c, BR.br, LAY.borderW, 0.95 * aPais, LAY.border || COL.br);
       // capitais
       const aCap = aPais * (1 - fadeIn(h, 2500000, 700000));
       if (aCap > 0.01) for (const [sig, p] of capPts) { const q = P(c, [p[0], p[1], 0]); if (!onScreen(q)) continue;
