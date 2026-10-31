@@ -54,19 +54,16 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 .lab.y .nm{border-color:var(--y)}.lab.y .stem{background:linear-gradient(to bottom,var(--y),rgba(255,223,0,0))}
 .lab.sm .nm{font-size:32px;padding:8px 20px}
 
-/* foco: desfoque gaussiano do mapa atrás dos blocos marcados com data-veil, com degradê horizontal e tinta a 40%,
+/* foco: desfoque gaussiano do mapa atrás dos blocos marcados com data-veil: faixa de borda a borda, cheia no meio e
+   dissolvendo para cima e para baixo, tinta a 40%,
    animado como um ajuste de foco (entra com o texto, sai com ele). Na tela final o desfoque cobre o quadro inteiro.
    Camada própria (#veils) logo acima do canvas. --veil 0 desliga tudo. */
 :root{--veil:1;--blur:18px}
 #veils{position:absolute;inset:0;pointer-events:none}
 .veil{position:absolute;animation:focusIn .7s var(--ease) var(--in) both, focusOut .5s var(--ease) var(--out) forwards;
-  background:linear-gradient(to right, rgba(6,14,36,.4) 0%, rgba(6,14,36,.32) 55%, rgba(6,14,36,0) 100%);
-  -webkit-mask-image:linear-gradient(to right,#000 0%,#000 45%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 20%,#000 80%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to right,#000 0%,#000 45%,rgba(0,0,0,0) 100%),linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 20%,#000 80%,rgba(0,0,0,0) 100%);
-  -webkit-mask-composite:source-in;mask-composite:intersect}
-.veil.center{background:linear-gradient(to right, rgba(6,14,36,0), rgba(6,14,36,.4) 25%, rgba(6,14,36,.4) 75%, rgba(6,14,36,0));
-  -webkit-mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 22%,#000 78%,rgba(0,0,0,0)),linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 20%,#000 80%,rgba(0,0,0,0) 100%);
-  mask-image:linear-gradient(to right,rgba(0,0,0,0),#000 22%,#000 78%,rgba(0,0,0,0)),linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 20%,#000 80%,rgba(0,0,0,0) 100%)}
+  background:rgba(6,14,36,.4);
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 24%,#000 76%,rgba(0,0,0,0) 100%);
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,0) 0%,#000 24%,#000 76%,rgba(0,0,0,0) 100%)}
 .veil.full{background:rgba(6,14,36,.4);-webkit-mask-image:none;mask-image:none;--blur:24px}
 @keyframes focusIn{from{backdrop-filter:blur(0px);opacity:0}to{backdrop-filter:blur(var(--blur));opacity:1}}
 @keyframes focusOut{to{backdrop-filter:blur(0px);opacity:0}}
@@ -240,8 +237,8 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
   const sr=stage.getBoundingClientRect();
   document.querySelectorAll('[data-veil]').forEach(b=>{ if(b.matches('.cred')) return;
     const r=b.getBoundingClientRect(), cs=getComputedStyle(b), v=document.createElement('div');
-    const full=b.matches('.brand'), center=cs.textAlign==='center'; v.className='veil'+(full?' full':center?' center':'');
-    const mx=160, my=90; let L=r.left-sr.left-mx, T=r.top-sr.top-my, Wd=center?r.width+2*mx:1080-(r.left-sr.left-mx), Hg=r.height+2*my;
+    const full=b.matches('.brand'); v.className='veil'+(full?' full':'');
+    const my=110; let L=0, T=r.top-sr.top-my, Wd=1080, Hg=r.height+2*my;   // faixa de borda a borda
     if(full){L=0;T=0;Wd=1080;Hg=1920;}
     v.style.cssText=`left:${L}px;top:${T}px;width:${Wd}px;height:${Hg}px;--in:${cs.getPropertyValue('--in').trim()||'0s'};--out:${cs.getPropertyValue('--out').trim()||'999s'}`;
     veils.appendChild(v);}); }
