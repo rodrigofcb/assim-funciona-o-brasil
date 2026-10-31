@@ -63,23 +63,31 @@
   const hlRings = {}; for (const k of hlKeys) hlRings[k] = N[k].ring;
   const pulseAt = (t, b, dur = 1.6, hz = 1.3) => b === undefined ? 0 : (0.5 + 0.5 * Math.sin(2 * Math.PI * (t - b) * hz)) * sm((t - b) / 0.3) * (1 - sm((t - b - dur) / 0.5));
 
-  // ---- holofote: cone do topo das torres até o chão, varrendo a Esplanada
+  // ---- holofote: cone do topo das torres até o chão, varrendo a Esplanada.
+  // A mancha no chão é a elipse real do cone (meio-ângulo vertical bv, horizontal bh) e o feixe é desenhado do ápice até a borda
+  // distante dessa elipse, de modo que os dois coincidem por construção.
   function beam(c, t) {
     const b0 = B.beam, k = (t - b0) / 2.2; if (k < 0 || k > 1) return;
     const alpha = Math.sin(Math.PI * Math.min(1, k)) ** 0.6 * 0.55;
     const ang = lerp(-17.9 * deg + 28 * deg, -17.9 * deg - 22 * deg, sm(k)) + Math.PI; // aponta para oeste (Esplanada), varrendo
-    const reach = 1200, spread = 9 * deg, cx = topoTorre[0], cy = topoTorre[1];
-    const pts = []; for (let a = -spread; a <= spread + 1e-6; a += spread / 6) pts.push([cx + reach * Math.cos(ang + a), cy + reach * Math.sin(ang + a), 0]);
+    const cx = topoTorre[0], cy = topoTorre[1], Hh = topoTorre[2];
+    const d = 650, bv = 4.5 * deg, bh = 7 * deg;                     // eixo do cone cruza o chão a d metros; meio-ângulos
+    const th = Math.atan2(Hh, d); const near = Hh / Math.tan(th + bv), far = Hh / Math.tan(th - bv);
+    const a = (far - near) / 2, cen = (near + far) / 2, bw = cen * Math.tan(bh);
+    const u = [Math.cos(ang), Math.sin(ang)], v = [-u[1], u[0]];
+    const rim = ph => [cx + (cen + a * Math.cos(ph)) * u[0] + bw * Math.sin(ph) * v[0], cy + (cen + a * Math.cos(ph)) * u[1] + bw * Math.sin(ph) * v[1], 0];
     const apex = P(c, topoTorre); if (!apex) return;
-    ctx.beginPath(); ctx.moveTo(apex[0], apex[1]); let ok = true;
-    for (const p of pts) { const q = P(c, p); if (!q) { ok = false; break; } ctx.lineTo(q[0], q[1]); }
-    if (!ok) return; ctx.closePath();
-    const far = P(c, pts[6]); const gr = ctx.createLinearGradient(apex[0], apex[1], far[0], far[1]);
-    gr.addColorStop(0, `rgba(${COL.y},${alpha})`); gr.addColorStop(1, `rgba(${COL.y},0)`); ctx.fillStyle = gr; ctx.fill();
-    // mancha no chão
-    const hit = [cx + 700 * Math.cos(ang), cy + 700 * Math.sin(ang)]; const ring = E3.circle(hit[0], hit[1], 0.5, 160, 36);
-    ctx.beginPath(); let first = true; for (const p of ring) { const q = P(c, p); if (!q) return; if (first) { ctx.moveTo(q[0], q[1]); first = false; } else ctx.lineTo(q[0], q[1]); }
-    ctx.fillStyle = `rgba(${COL.y},${alpha * 0.35})`; ctx.fill();
+    // feixe: ápice → arco distante da elipse (entre os pontos de tangência vistos do pé das torres)
+    const ph1 = Math.acos(-a / cen); const pts = []; const n = 28;
+    for (let i = 0; i <= n; i++) { const q = P(c, rim(ph1 - 2 * ph1 * i / n)); if (!q) return; pts.push(q); }
+    ctx.beginPath(); ctx.moveTo(apex[0], apex[1]); for (const q of pts) ctx.lineTo(q[0], q[1]); ctx.closePath();
+    const farQ = pts[n >> 1]; const gr = ctx.createLinearGradient(apex[0], apex[1], farQ[0], farQ[1]);
+    gr.addColorStop(0, `rgba(${COL.y},${alpha})`); gr.addColorStop(1, `rgba(${COL.y},${alpha * 0.12})`); ctx.fillStyle = gr; ctx.fill();
+    // mancha no chão: a elipse inteira
+    ctx.beginPath(); let first = true;
+    for (let i = 0; i <= 48; i++) { const q = P(c, rim(2 * Math.PI * i / 48)); if (!q) return; if (first) { ctx.moveTo(q[0], q[1]); first = false; } else ctx.lineTo(q[0], q[1]); }
+    ctx.closePath(); ctx.fillStyle = `rgba(${COL.y},${alpha * 0.45})`; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = `rgba(${COL.y},${alpha * 0.9})`; ctx.stroke();
   }
 
   // ---- cena 3: a lei viaja entre Congresso e Planalto (arco luminoso com rastro)
