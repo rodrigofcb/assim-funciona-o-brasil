@@ -8,10 +8,10 @@ Papéis procurados (mesmos nomes de sfx.py):
   impact  acorde cheio e grave (impacto)                 thrum   nota grave longa ou nota repetida (zumbido que acende)
   whoosh  corrida de 5 a 9 notas, comprimida para 0,55 s   fill    corrida ascendente de 6 a 16 notas (preenchimento/contagem)
   sweep   frase ascendente longa (> 1,2 s)               marca   acorde final da peça (cadência)
-Saída: <out>/<peça>/<papel>_<n>.wav (cada um começa no ataque), <out>/<peça>/indice.md com instante de origem e notas,
+Saída: <out>/<peça>/<papel>_<n>.wav e .json (notas t/dur/altura/vel relativas ao ataque, para re-tocar com outro andamento), <out>/<peça>/indice.md com instante de origem e notas,
 e <out>/catalogo.wav + catalogo.txt com tudo em sequência (dois bipes entre papéis, um bipe entre fragmentos).
 """
-import sys, pathlib, argparse, subprocess, functools
+import sys, pathlib, argparse, subprocess, functools, json
 import numpy as np, mido
 from scipy.io import wavfile
 from scipy.signal import fftconvolve, butter, sosfilt
@@ -158,6 +158,7 @@ for mid in a.mids:
             x = render(rel, tail=0.25 if k == "tick" else 0.6)
             if CUT[k]: x = x[:int((CUT[k] + 0.35) * SR)]; f = int(0.12 * SR); x[-f:] *= np.linspace(1, 0, f)[:, None]
             fn = d / f"{k}_{n_}.wav"; wavfile.write(fn, SR, (x * 32767).astype(np.int16))
+            fn.with_suffix(".json").write_text(json.dumps({"papel": k, "origem": round(t0, 2), "notas": [[round(t, 4), round(dd, 4), p, v] for t, dd, p, v in rel]}), encoding="utf-8")
             ns = " ".join(f"{NAMES[p % 12]}{p // 12 - 1}" for _, _, p, _ in rel[:10]) + (" …" if len(rel) > 10 else "")
             lines.append(f"| {fn.name} | {k} | {t0:.1f} | {ns} | {len(x) / SR:.2f} s |")
             idx.append((pos, f"{name} {k} {n_}  (origem {t0:.1f} s)")); cat += [beep1, sil(0.2), x, sil(0.7)]; pos += (len(beep1) + int(0.9 * SR) + len(x)) / SR
