@@ -27,3 +27,24 @@ A obra é de domínio público; a transcrição pode ter licença própria do tr
 | olhos-feiticeiros-jacomino-americo-canhoto-1889-1928 | Olhos Feiticeiros | Canhoto | choro | violão |
 
 Execução: `ferramentas/violao.py` toca qualquer um deles com amostras de violão de náilon (créditos em `../CREDITOS.md`).
+
+## Seleção para trilhas (Rodrigo, 02/11/2026)
+
+Ouvidas em amostras de 15 s tocadas por `violao.py`. Asteriscos = quanto combinam com os vídeos do canal.
+Desta lista saem as trilhas dos próximos episódios; depois, trechos delas serão recortados para melhorar os efeitos sonoros.
+
+| nota | obra | arquivo |
+|---|---|---|
+| **** | Abismo de Rosas (Canhoto, valsa) | abismo-de-rosas-americo-canhoto-jacomino |
+| **** | Arrependida (Canhoto, valsa) | arrependida-americo-jacomino-canhoto-1889-1928 |
+| *** | Reboliço (João Pernambuco, choro) | rebolico-joao-pernambuco-1883-1947 |
+| *** | Choro nº 2 (João Pernambuco) | choro-n2-joao-pernambuco-1883-1947 |
+| ** | Iara (Anacleto de Medeiros, schottisch; fragmento de 30 s) | yara-anacleto-de-medeiros |
+| ** | Brasileirinho (João Pernambuco, choro) | brasileirinho-joao-pernambuco |
+| * | Apanhei-te, Cavaquinho (Nazareth, polca) | apanhei-te-cavaquinho-ernesto-nazare |
+| * | Atraente (Chiquinha Gonzaga, polca) | atraente-francisca-gonzaga |
+| * | Os Boêmios (Anacleto de Medeiros, schottisch) | o-boemio-anacleto-de-medeiros |
+| | Odeon (Nazareth, tango); **licença da transcrição a confirmar** | odeon-ernesto-nazare-harmonizacao-rolf-steyer |
+| | Escovado (Nazareth, tango) | escovado-ernesto-nazareth |
+
+Fora da seleção: Brejeiro, Fon-Fon, Coração que Sente, Fado, Flor Amorosa, Primeiro Amor, Branca, Sons de Carrilhões, Olhos Feiticeiros.
